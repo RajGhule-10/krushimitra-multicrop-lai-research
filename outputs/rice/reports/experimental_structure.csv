@@ -1,0 +1,4 @@
+location,retained_records,unique_source_rows,unique_varieties,unique_treatments,unique_observation_stages,unique_observation_dates,measurement_types
+Jabalpur,40,10,4,4,4,10,variety_level_source_value
+Kuthulia,15,3,1,5,1,2,treatment_level_mean
+Ranchi,40,40,2,16,3,6,treatment_level_source_value

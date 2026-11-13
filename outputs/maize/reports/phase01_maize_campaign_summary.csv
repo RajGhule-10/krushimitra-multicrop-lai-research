@@ -1,0 +1,4 @@
+Campaign,Observations,Unique_Farms,Mean_LAI,Min_LAI,Max_LAI,Invalid_LAI,Invalid_GPS,Invalid_Date
+campaign_1,150,50,1.9846,0.58,5.03,0,0,0
+campaign_2,153,50,3.3916993464052285,1.4,5.61,0,3,0
+campaign_3,153,51,2.8005228758169936,0.0,5.38,0,0,0

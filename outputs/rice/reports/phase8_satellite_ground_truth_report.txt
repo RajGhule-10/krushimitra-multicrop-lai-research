@@ -1,0 +1,62 @@
+======================================================================
+KRUSHIMITRA — PHASE 8
+SATELLITE AND GROUND-TRUTH INTEGRATION ASSESSMENT
+======================================================================
+
+1. DATASET OVERVIEW
+----------------------------------------------------------------------
+Ranchi ground-truth records: 41
+Records with valid observation dates: 41
+Records with numeric LAI: 41
+Sentinel-2 acquisition dates: 4
+
+2. TEMPORAL MATCHING
+----------------------------------------------------------------------
+Matching threshold: 10 days
+Records matched within threshold: 24
+Records without a match within threshold: 17
+Matching percentage: 58.54%
+
+3. PHASE 4 CONSISTENCY CHECKS
+----------------------------------------------------------------------
+                    check  result                                                               details
+phase4_matching_available    True                                            40 Phase 4 records loaded.
+   phase4_dates_parseable    True                                             40 valid dates out of 40.
+  phase4_status_available    True {'site_level_temporal_match_only': 24, 'no_scene_within_10_days': 16}
+
+4. RESEARCH ELIGIBILITY
+----------------------------------------------------------------------
+                              assessment          result                                                                                                interpretation              eligibility
+         All Ranchi ground-truth records              41                    Includes all records, including the suspicious observation excluded from model candidates.                available
+                 Model candidate records              40                                                          Records retained by Phase 4 for potential modelling.                available
+            Excluded Ranchi observations               1                                                            Records excluded from model candidates by Phase 4. excluded_from_candidates
+                 Valid observation dates           41/41                                                            Ground-truth records with valid observation dates.                available
+                Numeric LAI observations           41/41                                                                  Ground-truth records containing numeric LAI.                available
+          Satellite acquisition coverage         4 dates                                                                       Four available Sentinel-2 acquisitions.                  limited
+            All-record temporal matching  24/41 (58.54%)                                           24 of all Ranchi records have a nearest acquisition within 10 days.            temporal_only
+       All-record unmatched observations              17                             All Ranchi records without a satellite acquisition within the matching threshold.                  limited
+             Candidate temporal matching  24/40 (60.00%)                                                        Matching result for Phase 4 retained model candidates.            temporal_only
+        Candidate unmatched observations              16                                Retained candidate observations without a match within the matching threshold.                  limited
+        Distinct candidate matched dates               4                                    Unique ground-truth dates represented among temporally matched candidates.            temporal_only
+             Distinct ground-truth dates               7                                                               Unique observation dates in all Ranchi records.                available
+       Plot-level spatial correspondence Not established                     Satellite pixels represent a temporary site buffer, not georeferenced experimental plots.             not_eligible
+Treatment-level satellite correspondence Not established                          No verified mapping between satellite pixels and individual experimental treatments.             not_eligible
+   Supervised satellite-to-LAI modelling   Not justified Temporal matches alone do not establish spatially compatible training observations or independent validation.             not_eligible
+
+5. SCIENTIFIC LIMITATIONS
+----------------------------------------------------------------------
+- Satellite observations are sampled from a temporary 100 m site buffer.
+- Experimental plot boundaries and plot-level coordinates are not available.
+- A temporal date match does not establish spatial correspondence.
+- Satellite vegetation indices are not direct LAI measurements.
+- Four satellite acquisition dates do not provide continuous crop-season coverage.
+- Ground-truth records have different experimental structures and treatment groupings.
+- The nearest-date matching procedure does not establish a causal or predictive relationship.
+- The suspicious Ranchi LAI observation remains excluded from model candidates according to Phase 4 processing.
+- No satellite-to-LAI supervised model was trained.
+
+6. FINAL CONCLUSION
+----------------------------------------------------------------------
+The available Ranchi data support exploratory temporal assessment of site-level Sentinel-2 indices and ground-truth observation dates.
+
+Temporal matching alone is insufficient to justify plot-level satellite-LAI integration or supervised LAI prediction. Georeferenced experimental plot boundaries, compatible field measurements, and independent validation are required.

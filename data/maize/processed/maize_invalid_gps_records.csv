@@ -1,0 +1,4 @@
+Date,Time,GpsLat,GpsLong,GpsAlt,LAI,Farm_ID,Campaign,Original_Farm_ID,LAI_Clean,Latitude_Clean,Longitude_Clean,Measurement_Date,Invalid_LAI,Invalid_GPS,Invalid_Date
+2023/07/09,17:19:16,0.0,0.0,0.0,3.14,NW001,campaign_2,NW001,3.14,0.0,0.0,2023-07-09,False,True,False
+2023/07/09,17:24:28,0.0,0.0,0.0,3.15,NW001,campaign_2,NW001,3.15,0.0,0.0,2023-07-09,False,True,False
+2023/07/09,17:22:45,0.0,0.0,0.0,3.3,NW001,campaign_2,NW001,3.3,0.0,0.0,2023-07-09,False,True,False

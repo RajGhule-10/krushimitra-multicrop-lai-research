@@ -1,0 +1,24 @@
+MAIZE DATA QUALITY REPORT
+============================================================
+
+Total observations: 456
+Unique field farms: 53
+Maize parcel polygons: 169
+Matched farm IDs: 51
+Unmatched field farms: 2
+
+INVALID RECORDS
+Invalid LAI: 0
+Invalid GPS: 3
+Invalid dates: 0
+
+CAMPAIGN SUMMARY
+  Campaign  Observations  Unique_Farms  Mean_LAI  Min_LAI  Max_LAI  Invalid_LAI  Invalid_GPS  Invalid_Date
+campaign_1           150            50  1.984600     0.58     5.03            0            0             0
+campaign_2           153            50  3.391699     1.40     5.61            0            3             0
+campaign_3           153            51  2.800523     0.00     5.38            0            0             0
+
+GPS SPATIAL VALIDATION
+GPS_Inside_Matched_Parcel
+True     283
+False    170

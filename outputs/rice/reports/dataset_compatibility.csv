@@ -1,0 +1,4 @@
+location,record_count,measurement_structure,observation_design,spatial_resolution,temporal_coverage,lai_minimum,lai_maximum,unique_observation_dates,combined_supervised_model_eligible,limitations
+Jabalpur,40,Variety-level source observations,Multiple growth stages and varieties,Site-level coordinates,Multiple observation dates,0.62,4.27,10,No,Experimental plot boundaries and plot-level satellite correspondence are unavailable.
+Kuthulia,15,Treatment-level means,Three sowing-date groups and five establishment-method treatments,Site-level coordinates,Harvest observations,0.87,1.15,2,No,Treatment means are not independent plot-level measurements. Only one variety is represented.
+Ranchi,40,Treatment-level source observations,"Multiple treatments, varieties and growth stages",Site-level coordinates,Multiple observation dates,1.96,4.26,6,No,Plot boundaries are unavailable. Satellite features represent a general 100-metre site buffer.

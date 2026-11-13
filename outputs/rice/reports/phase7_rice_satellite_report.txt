@@ -1,0 +1,138 @@
+KRUSHIMITRA — PHASE 7
+RICE SATELLITE TEMPORAL AND SPATIAL ANALYSIS
+=================================================================
+
+1. DATASET OVERVIEW
+
+Total pixel records: 309
+Unique acquisition dates: 4
+Unique satellite images: 4
+Spectral bands: 10
+Spectral indices: 7
+
+Acquisition dates:
+  2019-09-20: 77 pixel records
+  2019-10-10: 76 pixel records
+  2019-10-15: 78 pixel records
+  2019-10-30: 78 pixel records
+
+2. DATA QUALITY
+
+ALL_DATES: 309 pixels, 0 missing band values, 0 missing index values, 0 duplicate coordinate/date records.
+2019-09-20: 77 pixels, 0 missing band values, 0 missing index values, 0 duplicate coordinate/date records.
+2019-10-10: 76 pixels, 0 missing band values, 0 missing index values, 0 duplicate coordinate/date records.
+2019-10-15: 78 pixels, 0 missing band values, 0 missing index values, 0 duplicate coordinate/date records.
+2019-10-30: 78 pixels, 0 missing band values, 0 missing index values, 0 duplicate coordinate/date records.
+
+Reflectance checks:
+  Total band values: 3090
+  Missing band values: 0
+  Negative reflectance values: 0
+  Reflectance values above 1.5: 0
+
+3. TEMPORAL INDEX SUMMARY
+
+NDVI:
+  2019-09-20: mean=0.6956, median=0.6968, std=0.1055
+  2019-10-10: mean=0.6505, median=0.6775, std=0.0965
+  2019-10-15: mean=0.6674, median=0.6885, std=0.0796
+  2019-10-30: mean=0.7113, median=0.7303, std=0.0811
+
+EVI:
+  2019-09-20: mean=0.5788, median=0.5956, std=0.1199
+  2019-10-10: mean=0.5513, median=0.5726, std=0.1063
+  2019-10-15: mean=0.4518, median=0.4599, std=0.0764
+  2019-10-30: mean=0.4360, median=0.4457, std=0.0739
+
+SAVI:
+  2019-09-20: mean=0.4710, median=0.4787, std=0.0852
+  2019-10-10: mean=0.4293, median=0.4481, std=0.0717
+  2019-10-15: mean=0.3969, median=0.4019, std=0.0599
+  2019-10-30: mean=0.4036, median=0.4156, std=0.0606
+
+GNDVI:
+  2019-09-20: mean=0.5811, median=0.5841, std=0.0825
+  2019-10-10: mean=0.5434, median=0.5604, std=0.0731
+  2019-10-15: mean=0.5719, median=0.5835, std=0.0622
+  2019-10-30: mean=0.6121, median=0.6152, std=0.0661
+
+NDRE:
+  2019-09-20: mean=0.5051, median=0.5004, std=0.0849
+  2019-10-10: mean=0.4833, median=0.4920, std=0.0670
+  2019-10-15: mean=0.4628, median=0.4680, std=0.0604
+  2019-10-30: mean=0.4866, median=0.4832, std=0.0762
+
+NDMI:
+  2019-09-20: mean=0.2851, median=0.2717, std=0.0625
+  2019-10-10: mean=0.2848, median=0.2840, std=0.0676
+  2019-10-15: mean=0.2739, median=0.2652, std=0.0630
+  2019-10-30: mean=0.2623, median=0.2797, std=0.0668
+
+MNDWI:
+  2019-09-20: mean=-0.3587, median=-0.3625, std=0.0789
+  2019-10-10: mean=-0.3078, median=-0.3098, std=0.0679
+  2019-10-15: mean=-0.3547, median=-0.3553, std=0.0575
+  2019-10-30: mean=-0.4187, median=-0.4108, std=0.0690
+
+4. SPATIAL VARIABILITY
+
+Spatial variability statistics are calculated within each acquisition date.
+Standard deviation, variance, range, IQR and coefficient of variation are descriptive statistics.
+
+5. OUTLIER ANALYSIS
+
+Outliers are flagged using the 1.5 × IQR rule separately for each index and acquisition date.
+Outlier flags do not automatically indicate measurement errors or invalid pixels.
+No observations have been deleted because of outlier status.
+
+NDVI: 5 flagged index observations
+EVI: 7 flagged index observations
+SAVI: 9 flagged index observations
+GNDVI: 7 flagged index observations
+NDRE: 2 flagged index observations
+NDMI: 1 flagged index observations
+MNDWI: 3 flagged index observations
+
+6. INDEX CORRELATION
+
+Pooled Pearson correlations describe relationships among pixel-level indices across all acquisition dates.
+These correlations may be influenced by date-related differences and should not be interpreted as independent causal relationships.
+
+NDVI vs SAVI: 0.8283
+EVI vs NDVI: 0.7001
+EVI vs SAVI: 0.9566
+EVI vs GNDVI: 0.6082
+EVI vs NDRE: 0.7130
+EVI vs NDMI: 0.6906
+EVI vs MNDWI: -0.1988
+GNDVI vs NDVI: 0.9433
+GNDVI vs SAVI: 0.7768
+GNDVI vs NDRE: 0.8243
+GNDVI vs NDMI: 0.5778
+GNDVI vs MNDWI: -0.7644
+NDRE vs NDVI: 0.8767
+NDRE vs SAVI: 0.7613
+NDMI vs NDVI: 0.6849
+NDMI vs SAVI: 0.7188
+NDMI vs NDRE: 0.5732
+MNDWI vs NDVI: -0.6128
+MNDWI vs SAVI: -0.3832
+MNDWI vs NDRE: -0.5695
+MNDWI vs NDMI: 0.0802
+
+7. SCIENTIFIC LIMITATIONS
+
+1. The study area is represented by a temporary 100-metre buffer around a site-level coordinate.
+2. Experimental plot boundaries are unavailable.
+3. Pixel samples cannot be assumed to represent individual experimental rice plots.
+4. Four acquisition dates provide limited temporal coverage.
+5. Scene cloud percentage is scene-level metadata and does not represent cloud contamination for each sampled pixel.
+6. Spectral indices are not direct measurements of leaf area index.
+
+8. FINAL INTERPRETATION
+
+The dataset supports exploratory analysis of site-level Sentinel-2 spectral behaviour and spatial variability across four acquisition dates.
+The analysis does not establish plot-level rice monitoring accuracy or satellite-based LAI prediction.
+
+=================================================================
+END OF PHASE 7 REPORT

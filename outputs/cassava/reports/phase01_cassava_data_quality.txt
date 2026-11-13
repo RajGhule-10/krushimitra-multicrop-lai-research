@@ -1,0 +1,61 @@
+CASSAVA DATA PREPARATION REPORT
+=======================================================
+
+Original LAI measurements: 2022
+Aggregated LAI plot-MAP records: 313
+Satellite plot-MAP records: 235
+Matched records: 232
+Unique matched plots: 47
+Acquisition dates: 5
+Satellite features: 33
+
+AVAILABLE VEGETATION INDICES
+BNDVI, CIG, DVI, EVI, GNDVI, GRVI, NDVI, NDWI, RVI, SAVI, SeLI, TCARI, VIG
+
+MISSING EXPECTED INDICES
+None
+
+SPECTRAL FEATURES
+B1, B11, B12, B2, B3, B4, B5, B6, B7, B8, B8A, B9
+
+QUALITY / AUXILIARY FEATURES
+AOT, MSK_CLDPRB, QA10, QA20, QA60, TCI_B, TCI_G, TCI_R
+
+MATCHED OBSERVATIONS BY MAP
+MAP
+2    46
+3    46
+4    47
+5    46
+7    47
+
+UNMATCHED LAI RECORDS BY MAP
+MAP
+6    46
+8    35
+
+UNMATCHED SATELLITE RECORDS BY MAP
+MAP
+2    1
+3    1
+5    1
+
+LAI SUMMARY
+count    232.000000
+mean       1.299796
+std        0.583067
+min        0.216667
+25%        0.866667
+50%        1.225000
+75%        1.604167
+max        3.571429
+
+SATELLITE DATE DIFFERENCE SUMMARY (DAYS)
+count    232.000000
+mean       4.226293
+std        2.397121
+min        1.000000
+25%        2.000000
+50%        5.000000
+75%        6.000000
+max        8.000000

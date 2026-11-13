@@ -1,0 +1,55 @@
+=================================================================
+PHASE 03: MAIZE SENTINEL-2 EXTRACTION REPORT
+=================================================================
+
+Input file: /Users/rajghule/Downloads/KrushiMitra-Research/data/maize/processed/maize_sentinel2_candidate_observations.csv
+Satellite collection: COPERNICUS/S2_SR_HARMONIZED
+Google Cloud project: riparian-eye
+
+DATASET SUMMARY
+---------------------------------------------
+Valid input observations: 441
+Invalid input observations: 0
+Successful satellite matches: 183
+Failed satellite matches: 258
+Satellite match rate: 41.50%
+
+EXTRACTION SETTINGS
+---------------------------------------------
+Matching window: +/- 7 days
+Sampling scale: 20 metres
+Accepted SCL classes: [4, 5]
+Image selection: nearest valid point pixel
+
+EXTRACTION STATUS
+---------------------------------------------
+NO_CLEAR_IMAGE: 258
+SUCCESS: 183
+
+CAMPAIGN SUCCESS COUNTS
+---------------------------------------------
+campaign_1: 101
+campaign_3: 82
+
+DATE MATCHING QUALITY
+---------------------------------------------
+Mean absolute date difference: 4.9271047171625195
+Median absolute date difference: 4.666292013888889
+count    183.000000
+mean       4.927105
+std        1.902192
+min        2.333714
+25%        3.333714
+50%        4.666292
+75%        7.333716
+max        7.333716
+Name: s2_absolute_day_difference, dtype: float64
+
+OUTPUT FILES
+---------------------------------------------
+/Users/rajghule/Downloads/KrushiMitra-Research/data/maize/processed/maize_sentinel2_extracted.csv
+/Users/rajghule/Downloads/KrushiMitra-Research/data/maize/processed/maize_sentinel2_extraction_failed.csv
+
+Execution time: 30.70 seconds
+
+END OF REPORT

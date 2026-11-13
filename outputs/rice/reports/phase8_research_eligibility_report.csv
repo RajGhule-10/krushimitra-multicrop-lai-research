@@ -1,0 +1,16 @@
+assessment,result,interpretation,eligibility
+All Ranchi ground-truth records,41,"Includes all records, including the suspicious observation excluded from model candidates.",available
+Model candidate records,40,Records retained by Phase 4 for potential modelling.,available
+Excluded Ranchi observations,1,Records excluded from model candidates by Phase 4.,excluded_from_candidates
+Valid observation dates,41/41,Ground-truth records with valid observation dates.,available
+Numeric LAI observations,41/41,Ground-truth records containing numeric LAI.,available
+Satellite acquisition coverage,4 dates,Four available Sentinel-2 acquisitions.,limited
+All-record temporal matching,24/41 (58.54%),24 of all Ranchi records have a nearest acquisition within 10 days.,temporal_only
+All-record unmatched observations,17,All Ranchi records without a satellite acquisition within the matching threshold.,limited
+Candidate temporal matching,24/40 (60.00%),Matching result for Phase 4 retained model candidates.,temporal_only
+Candidate unmatched observations,16,Retained candidate observations without a match within the matching threshold.,limited
+Distinct candidate matched dates,4,Unique ground-truth dates represented among temporally matched candidates.,temporal_only
+Distinct ground-truth dates,7,Unique observation dates in all Ranchi records.,available
+Plot-level spatial correspondence,Not established,"Satellite pixels represent a temporary site buffer, not georeferenced experimental plots.",not_eligible
+Treatment-level satellite correspondence,Not established,No verified mapping between satellite pixels and individual experimental treatments.,not_eligible
+Supervised satellite-to-LAI modelling,Not justified,Temporal matches alone do not establish spatially compatible training observations or independent validation.,not_eligible

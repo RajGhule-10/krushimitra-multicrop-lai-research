@@ -1,0 +1,54 @@
+======================================================================
+PHASE 03C: EXACT GPS VS NEIGHBOURHOOD COMPARISON
+======================================================================
+
+Input observations: 258
+Invalid input observations: 0
+
+EXTRACTION SETTINGS
+--------------------------------------------------
+Date window: +/- 15 days
+Neighbourhood radius: 30 metres
+Sampling scale: 20 metres
+Accepted SCL classes: [4, 5]
+
+EXACT GPS RESULTS
+--------------------------------------------------
+Successful: 116 (44.96%)
+Failed: 142
+
+NEIGHBOURHOOD RESULTS
+--------------------------------------------------
+Successful: 133 (51.55%)
+Failed: 125
+
+METHOD COMPARISON
+--------------------------------------------------
+Both methods successful: 116
+Exact GPS only: 0
+Neighbourhood only: 17
+Neither method successful: 125
+
+CAMPAIGN-WISE RESULTS
+--------------------------------------------------
+             observations  exact_success  neighbourhood_success
+campaign_id                                                    
+campaign_1             49             27                     34
+campaign_2            138             26                     30
+campaign_3             71             63                     69
+
+NEIGHBOURHOOD SPATIAL OFFSETS
+--------------------------------------------------
+Mean nearest pixel offset: 10.22 m
+Median nearest pixel offset: 8.59 m
+Maximum nearest pixel offset: 28.75 m
+
+OUTPUT FILES
+--------------------------------------------------
+/Users/rajghule/Downloads/KrushiMitra-Research/data/maize/processed/maize_phase03c_exact_gps.csv
+/Users/rajghule/Downloads/KrushiMitra-Research/data/maize/processed/maize_phase03c_neighbourhood.csv
+/Users/rajghule/Downloads/KrushiMitra-Research/data/maize/processed/maize_phase03c_comparison.csv
+
+Execution time: 127.40 seconds
+
+END OF REPORT

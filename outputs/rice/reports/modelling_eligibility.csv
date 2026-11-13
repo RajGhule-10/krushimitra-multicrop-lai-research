@@ -1,0 +1,7 @@
+research_objective,current_status,reason,ranchi_temporal_matches,ranchi_temporal_unmatched
+Rice LAI descriptive analysis,Eligible with limitations,"Source LAI measurements are available, but experimental designs must be analysed separately.",24,16
+Rice variety and treatment comparisons,Eligible with limitations,Comparisons can be performed within compatible experimental designs and observation stages.,24,16
+Ranchi satellite vegetation-index analysis,Eligible for exploratory analysis,Four site-summary acquisition dates and pixel-level spectral features are available.,24,16
+Satellite-based rice LAI prediction,Not currently justified,Plot-level satellite correspondence and independent ground validation are unavailable.,24,16
+Combined three-location LAI model,Not currently justified,"Measurement structures, experimental designs, stages and locations differ.",24,16
+Independent model validation,Insufficient evidence,Independent plot-level validation samples have not been established.,24,16

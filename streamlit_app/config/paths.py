@@ -1,0 +1,10 @@
+"""Path helpers that do not depend on Streamlit's working directory."""
+
+from pathlib import Path
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+
+def project_path(relative_path: str) -> Path:
+    return PROJECT_ROOT / relative_path

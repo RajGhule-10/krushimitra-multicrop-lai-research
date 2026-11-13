@@ -1,0 +1,73 @@
+======================================================================
+PHASE 04B: NESTED MAIZE MODEL OPTIMIZATION
+======================================================================
+
+DATASET
+--------------------------------------------------
+Observations: 201
+Unique farms: 50
+
+VALIDATION
+--------------------------------------------------
+Outer GroupKFold: 5
+Inner GroupKFold: maximum 4
+Grouping: Farm_ID
+Hyperparameter selection: inner CV MAE
+
+MODEL COMPARISON
+--------------------------------------------------
+               Model  Observations  Unique_Farms  Outer_Folds      MAE     RMSE        R2
+          Ridge_Full           201            50            5 0.653786 0.842357 -0.062473
+   RandomForest_Full           201            50            5 0.603259 0.778359  0.092836
+RandomForest_Reduced           201            50            5 0.607857 0.790415  0.064515
+          Dummy_Mean           201            50            5 0.636808 0.819430 -0.005425
+
+OUTER FOLD METRICS
+--------------------------------------------------
+ Outer_Fold                Model  Train_Observations  Test_Observations  Train_Farms  Test_Farms      MAE     RMSE        R2
+          1           Ridge_Full                 160                 41           40          10 0.594990 0.802253 -0.074232
+          1    RandomForest_Full                 160                 41           40          10 0.504792 0.625879  0.346183
+          1 RandomForest_Reduced                 160                 41           40          10 0.522474 0.643860  0.308076
+          1           Dummy_Mean                 160                 41           40          10 0.570017 0.775496 -0.003770
+          2           Ridge_Full                 161                 40           40          10 0.714019 0.917952  0.086937
+          2    RandomForest_Full                 161                 40           40          10 0.646766 0.835193  0.244153
+          2 RandomForest_Reduced                 161                 40           40          10 0.610718 0.802449  0.302256
+          2           Dummy_Mean                 161                 40           40          10 0.748000 0.961491 -0.001730
+          3           Ridge_Full                 161                 40           40          10 0.738016 0.937403 -0.170251
+          3    RandomForest_Full                 161                 40           40          10 0.659757 0.864847  0.003895
+          3 RandomForest_Reduced                 161                 40           40          10 0.662151 0.879308 -0.029696
+          3           Dummy_Mean                 161                 40           40          10 0.708354 0.869557 -0.006984
+          4           Ridge_Full                 161                 40           40          10 0.719303 0.881991 -0.239836
+          4    RandomForest_Full                 161                 40           40          10 0.697920 0.891843 -0.267691
+          4 RandomForest_Reduced                 161                 40           40          10 0.746235 0.946146 -0.426766
+          4           Dummy_Mean                 161                 40           40          10 0.638006 0.799517 -0.018806
+          5           Ridge_Full                 161                 40           40          10 0.504075 0.637648  0.003633
+          5    RandomForest_Full                 161                 40           40          10 0.509524 0.633996  0.015011
+          5 RandomForest_Reduced                 161                 40           40          10 0.499843 0.634178  0.014447
+          5           Dummy_Mean                 161                 40           40          10 0.521334 0.661713 -0.072993
+
+BEST PARAMETERS BY OUTER FOLD
+--------------------------------------------------
+ Outer_Fold                Model                                              Best_Parameters  Inner_CV_MAE
+          1           Ridge_Full                                        {"model__alpha": 0.1}      0.644925
+          1    RandomForest_Full {"max_depth": 8, "max_features": 1.0, "min_samples_leaf": 2}      0.639219
+          1 RandomForest_Reduced {"max_depth": 8, "max_features": 0.7, "min_samples_leaf": 2}      0.646270
+          2           Ridge_Full                                        {"model__alpha": 100}      0.612365
+          2    RandomForest_Full {"max_depth": 8, "max_features": 0.7, "min_samples_leaf": 2}      0.626998
+          2 RandomForest_Reduced {"max_depth": 8, "max_features": 0.7, "min_samples_leaf": 4}      0.640225
+          3           Ridge_Full                                          {"model__alpha": 1}      0.592504
+          3    RandomForest_Full {"max_depth": 8, "max_features": 0.7, "min_samples_leaf": 2}      0.615703
+          3 RandomForest_Reduced {"max_depth": 8, "max_features": 0.7, "min_samples_leaf": 4}      0.593113
+          4           Ridge_Full                                        {"model__alpha": 0.1}      0.608107
+          4    RandomForest_Full {"max_depth": 8, "max_features": 1.0, "min_samples_leaf": 2}      0.545783
+          4 RandomForest_Reduced {"max_depth": 8, "max_features": 1.0, "min_samples_leaf": 2}      0.537292
+          5           Ridge_Full                                        {"model__alpha": 100}      0.673709
+          5    RandomForest_Full {"max_depth": 8, "max_features": 0.7, "min_samples_leaf": 2}      0.676006
+          5 RandomForest_Reduced {"max_depth": 8, "max_features": 0.7, "min_samples_leaf": 2}      0.670292
+
+IMPORTANT METHODOLOGICAL NOTES
+--------------------------------------------------
+Outer test farms are excluded from all inner hyperparameter selection.
+All reported predictions are outer-fold out-of-fold predictions.
+Reduced features were selected based on earlier exploratory Phase 04A results. Therefore, this comparison is exploratory, not an independent confirmation of feature selection.
+Results apply to the spatially reliable dataset and do not establish external geographic or seasonal generalization.

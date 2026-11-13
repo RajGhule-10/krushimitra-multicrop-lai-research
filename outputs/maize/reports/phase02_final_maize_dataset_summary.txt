@@ -1,0 +1,27 @@
+FINAL MAIZE DATASET PREPARATION REPORT
+=================================================================
+
+Original observations: 456
+Sentinel-2 candidates: 441
+Held observations: 6
+Excluded observations: 9
+
+DATASET STATUS COUNTS
+Dataset_Status
+READY_FOR_S2_EXTRACTION       441
+EXCLUDE_OUTSIDE_STUDY_AREA      6
+HOLD_UNRESOLVED_FARM_ID         6
+EXCLUDE_INVALID_GPS             3
+
+SPATIAL QUALITY
+Inside any maize parcel: 375
+Inside matching farm parcel: 283
+Candidate records requiring spatial review: 158
+
+
+CAMPAIGN SUMMARY
+            Observations  Unique_Farms  Mean_LAI  Min_LAI  Max_LAI
+Campaign                                                          
+campaign_1           150            50     1.985     0.58     5.03
+campaign_2           138            46     3.443     1.40     5.61
+campaign_3           153            51     2.801     0.00     5.38

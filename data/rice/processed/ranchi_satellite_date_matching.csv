@@ -1,0 +1,41 @@
+source_row_id,ground_truth_date,treatment,variety,lai,satellite_date,date_offset_days,match_status,satellite_image_id
+Ranchi_row_002,2019-08-15,1,IR64 drt1,2.19,,,no_scene_within_10_days,
+Ranchi_row_003,2019-09-14,1,IR64 drt1,3.46,2019-09-20,6.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF
+Ranchi_row_004,2019-10-14,1,IR64 drt1,4.26,2019-10-15,1.0,site_level_temporal_match_only,20191015T044751_20191015T045321_T45QUF
+Ranchi_row_007,2019-08-15,2,Naveen,2.17,,,no_scene_within_10_days,
+Ranchi_row_008,2019-09-14,2,Naveen,3.33,2019-09-20,6.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF
+Ranchi_row_009,2019-10-14,2,Naveen,4.16,2019-10-15,1.0,site_level_temporal_match_only,20191015T044751_20191015T045321_T45QUF
+Ranchi_row_012,2019-08-21,3,IR64 drt1,2.15,,,no_scene_within_10_days,
+Ranchi_row_013,2019-09-20,3,IR64 drt1,3.3,2019-09-20,0.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF
+Ranchi_row_014,2019-10-20,3,IR64 drt1,4.14,2019-10-15,-5.0,site_level_temporal_match_only,20191015T044751_20191015T045321_T45QUF
+Ranchi_row_017,2019-08-21,4,Naveen,2.13,,,no_scene_within_10_days,
+Ranchi_row_018,2019-09-20,4,Naveen,3.26,2019-09-20,0.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF
+Ranchi_row_019,2019-10-20,4,Naveen,3.82,2019-10-15,-5.0,site_level_temporal_match_only,20191015T044751_20191015T045321_T45QUF
+Ranchi_row_022,2019-08-15,5,IR64 drt1,2.14,,,no_scene_within_10_days,
+Ranchi_row_023,2019-09-14,5,IR64 drt1,3.24,2019-09-20,6.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF
+Ranchi_row_024,2019-10-14,5,IR64 drt1,3.8,2019-10-15,1.0,site_level_temporal_match_only,20191015T044751_20191015T045321_T45QUF
+Ranchi_row_027,2019-08-15,6,Naveen,2.11,,,no_scene_within_10_days,
+Ranchi_row_028,2019-09-14,6,Naveen,3.23,2019-09-20,6.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF
+Ranchi_row_029,2019-10-14,6,Naveen,3.64,2019-10-15,1.0,site_level_temporal_match_only,20191015T044751_20191015T045321_T45QUF
+Ranchi_row_032,2019-08-21,7,IR64 drt1,2.16,,,no_scene_within_10_days,
+Ranchi_row_033,2019-09-20,7,IR64 drt1,3.24,2019-09-20,0.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF
+Ranchi_row_034,2019-10-20,7,IR64 drt1,4.06,2019-10-15,-5.0,site_level_temporal_match_only,20191015T044751_20191015T045321_T45QUF
+Ranchi_row_037,2019-08-21,8,Naveen,2.1,,,no_scene_within_10_days,
+Ranchi_row_038,2019-09-20,8,Naveen,3.16,2019-09-20,0.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF
+Ranchi_row_039,2019-10-20,8,Naveen,3.91,2019-10-15,-5.0,site_level_temporal_match_only,20191015T044751_20191015T045321_T45QUF
+Ranchi_row_042,2019-08-15,9,IR64 drt1,2.18,,,no_scene_within_10_days,
+Ranchi_row_043,2019-09-14,9,IR64 drt1,3.39,2019-09-20,6.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF
+Ranchi_row_047,2019-08-15,10,Naveen,2.08,,,no_scene_within_10_days,
+Ranchi_row_048,2019-09-14,10,Naveen,3.31,2019-09-20,6.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF
+Ranchi_row_052,2019-08-21,11,IR64 drt1,2.04,,,no_scene_within_10_days,
+Ranchi_row_053,2019-09-20,11,IR64 drt1,3.06,2019-09-20,0.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF
+Ranchi_row_057,2019-08-21,12,Naveen,2.06,,,no_scene_within_10_days,
+Ranchi_row_058,2019-09-20,12,Naveen,3.03,2019-09-20,0.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF
+Ranchi_row_062,2019-08-15,13,IR64 drt1,2.05,,,no_scene_within_10_days,
+Ranchi_row_063,2019-09-14,13,IR64 drt1,2.94,2019-09-20,6.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF
+Ranchi_row_067,2019-08-15,14,Naveen,2.02,,,no_scene_within_10_days,
+Ranchi_row_068,2019-09-14,14,Naveen,3.02,2019-09-20,6.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF
+Ranchi_row_072,2019-08-21,15,IR64 drt1,1.98,,,no_scene_within_10_days,
+Ranchi_row_073,2019-09-20,15,IR64 drt1,3.16,2019-09-20,0.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF
+Ranchi_row_077,2019-08-21,16,Naveen,1.96,,,no_scene_within_10_days,
+Ranchi_row_078,2019-09-20,16,Naveen,2.89,2019-09-20,0.0,site_level_temporal_match_only,20190920T044659_20190920T045546_T45QUF

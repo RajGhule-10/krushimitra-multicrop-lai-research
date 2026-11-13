@@ -1,0 +1,57 @@
+KRUSHIMITRA — PHASE 9A VALIDATION REPORT
+=================================================================
+Total candidate scenes: 19
+Dates with valid pixels: 11
+Dates with zero valid pixels: 8
+Low-coverage dates: 2
+Acceptable-coverage dates: 9
+Total exported pixel observations: 715
+Sum of inventory pixel counts: 715
+Duplicate coordinate-date records: 0
+Spectral IQR flags: 83
+
+MONTHLY COVERAGE
+           candidate_scenes  dates_with_pixels
+month                                         
+August                    2                  0
+July                      2                  0
+November                  5                  5
+October                   5                  4
+September                 5                  2
+
+ACQUISITION QUALITY
+acquisition_date  scene_cloud_percentage  valid_pixel_count     coverage_status count_check
+      2019-07-17               18.631315                  0     NO_VALID_PIXELS        PASS
+      2019-07-22               71.378160                  0     NO_VALID_PIXELS        PASS
+      2019-08-11               53.154436                  0     NO_VALID_PIXELS        PASS
+      2019-08-31               88.778490                  0     NO_VALID_PIXELS        PASS
+      2019-09-05               87.730487                  0     NO_VALID_PIXELS        PASS
+      2019-09-10               70.445568                  0     NO_VALID_PIXELS        PASS
+      2019-09-15               32.494480                  7        LOW_COVERAGE        PASS
+      2019-09-20               22.178827                 77 ACCEPTABLE_COVERAGE        PASS
+      2019-09-30               80.532866                  0     NO_VALID_PIXELS        PASS
+      2019-10-05               35.689358                  9        LOW_COVERAGE        PASS
+      2019-10-10               26.826464                 76 ACCEPTABLE_COVERAGE        PASS
+      2019-10-15                1.674570                 78 ACCEPTABLE_COVERAGE        PASS
+      2019-10-20               44.878647                  0     NO_VALID_PIXELS        PASS
+      2019-10-30               13.452810                 78 ACCEPTABLE_COVERAGE        PASS
+      2019-11-04                4.005660                 78 ACCEPTABLE_COVERAGE        PASS
+      2019-11-14                0.000581                 78 ACCEPTABLE_COVERAGE        PASS
+      2019-11-19                0.000292                 78 ACCEPTABLE_COVERAGE        PASS
+      2019-11-24                1.034711                 78 ACCEPTABLE_COVERAGE        PASS
+      2019-11-29                1.067571                 78 ACCEPTABLE_COVERAGE        PASS
+
+SCIENTIFIC LIMITATIONS
+1. Study area represents a 100 m site buffer, not experimental plot boundaries.
+2. Pixel samples cannot be assigned to individual rice treatments or LAI observations.
+3. July and August have no valid pixels under the current masking and sampling procedure.
+4. Low-coverage dates are retained but should be interpreted cautiously.
+5. Spectral indices are not direct LAI measurements.
+6. Pooled correlations are descriptive and may be influenced by acquisition-date effects.
+7. This dataset does not independently validate a rice LAI prediction model.
+
+MONTHLY COVERAGE INTERPRETATION
+The available pixel observations begin in September. The exported data therefore do not provide usable July-August spectral coverage.
+
+FINAL STATUS
+Phase 9A validation and integration completed. No observations were automatically deleted.

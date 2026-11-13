@@ -1,0 +1,42 @@
+======================================================================
+PHASE 03B: SENTINEL-2 FAILURE DIAGNOSTIC REPORT
+======================================================================
+
+Google Cloud project: riparian-eye
+Collection: COPERNICUS/S2_SR_HARMONIZED
+Input observations: 258
+Invalid observations: 0
+
+DIAGNOSTIC SETTINGS
+--------------------------------------------------
+Calendar search window: +/- 7 days
+Strict actual acquisition difference: <= 7 days
+Point sampling scale: 20 metres
+Accepted SCL classes: [4, 5]
+
+DIAGNOSTIC STATUS COUNTS
+--------------------------------------------------
+NO_VALID_SCL_4_OR_5_PIXEL: 258 (100.00%)
+
+CAMPAIGN IMAGE AVAILABILITY
+--------------------------------------------------
+campaign_id  observations  mean_calendar_images  median_calendar_images  mean_sampled_images  mean_strict_images  mean_clear_images
+ campaign_1            49                   3.0                     3.0                  3.0            2.816327                0.0
+ campaign_2           138                   3.0                     3.0                  3.0            2.695652                0.0
+ campaign_3            71                   3.0                     3.0                  3.0            2.957746                0.0
+
+CAMPAIGN DIAGNOSTIC SUMMARY
+--------------------------------------------------
+campaign_id  NO_VALID_SCL_4_OR_5_PIXEL
+ campaign_1                         49
+ campaign_2                        138
+ campaign_3                         71
+
+OUTPUT FILES
+--------------------------------------------------
+/Users/rajghule/Downloads/KrushiMitra-Research/data/maize/processed/maize_sentinel2_failure_diagnostics.csv
+/Users/rajghule/Downloads/KrushiMitra-Research/outputs/maize/reports/phase03b_campaign_diagnostics.csv
+
+Execution time: 47.64 seconds
+
+END OF REPORT

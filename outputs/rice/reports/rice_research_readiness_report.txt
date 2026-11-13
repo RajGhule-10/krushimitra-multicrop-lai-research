@@ -1,0 +1,112 @@
+KRUSHIMITRA — PHASE 6
+RICE RESEARCH READINESS ASSESSMENT
+============================================================
+
+1. DATASET OVERVIEW
+
+All source records: 96
+Retained candidates: 95
+Excluded suspicious records: 1
+
+2. LOCATION-WISE DATASET
+
+Jabalpur:
+  Records: 40
+  Measurement structure: Variety-level source observations
+  Observation stages: Multiple growth stages and varieties
+  Spatial information: Site-level coordinates
+  Limitations: Experimental plot boundaries and plot-level satellite correspondence are unavailable.
+
+Kuthulia:
+  Records: 15
+  Measurement structure: Treatment-level means
+  Observation stages: Three sowing-date groups and five establishment-method treatments
+  Spatial information: Site-level coordinates
+  Limitations: Treatment means are not independent plot-level measurements. Only one variety is represented.
+
+Ranchi:
+  Records: 40
+  Measurement structure: Treatment-level source observations
+  Observation stages: Multiple treatments, varieties and growth stages
+  Spatial information: Site-level coordinates
+  Limitations: Plot boundaries are unavailable. Satellite features represent a general 100-metre site buffer.
+
+3. SATELLITE DATA ELIGIBILITY
+
+Total Ranchi ground-truth records: 40
+  Retained Ranchi observations assessed.
+
+Temporal matches: 24
+  Ground-truth dates with a satellite acquisition within the selected 10-day window.
+
+Unmatched records: 16
+  No selected satellite acquisition within the 10-day matching window.
+
+Temporal match rate percentage: 60.0
+  Temporal availability only; not model accuracy or plot-level matching quality.
+
+Satellite acquisition dates: 4
+  Number of unique satellite acquisition dates in the site-summary dataset.
+
+Satellite spatial correspondence: Site-level 100-metre buffer
+  No experimental plot boundaries or plot-specific satellite samples are available.
+
+Plot-level LAI validation: Not established
+  Cannot associate site-buffer satellite features with individual experimental treatments.
+
+4. RESEARCH OBJECTIVE ELIGIBILITY
+
+Rice LAI descriptive analysis: Eligible with limitations
+  Reason: Source LAI measurements are available, but experimental designs must be analysed separately.
+
+Rice variety and treatment comparisons: Eligible with limitations
+  Reason: Comparisons can be performed within compatible experimental designs and observation stages.
+
+Ranchi satellite vegetation-index analysis: Eligible for exploratory analysis
+  Reason: Four site-summary acquisition dates and pixel-level spectral features are available.
+
+Satellite-based rice LAI prediction: Not currently justified
+  Reason: Plot-level satellite correspondence and independent ground validation are unavailable.
+
+Combined three-location LAI model: Not currently justified
+  Reason: Measurement structures, experimental designs, stages and locations differ.
+
+Independent model validation: Insufficient evidence
+  Reason: Independent plot-level validation samples have not been established.
+
+5. DATA INTEGRITY CHECKS
+
+All-records dataset loaded: PASS
+  96 records
+
+Model-candidate dataset loaded: PASS
+  95 retained records
+
+Suspicious Ranchi observation preserved: PASS
+  42.26 should remain in all-records with exclusion flag.
+
+Suspicious value excluded from candidates: PASS
+  Suspicious value must not appear in model candidates.
+
+Source-row identity available: PASS
+  Source-row identifiers should be populated.
+
+Kuthulia sowing groups preserved: PASS
+  Three distinct Kuthulia sowing-date groups expected.
+
+Satellite acquisition dates available: PASS
+  Satellite dates should be available.
+
+Ranchi matching covers retained Ranchi records: PASS
+  40 matching rows for 40 retained Ranchi records.
+
+============================================================
+6. FINAL RESEARCH RECOMMENDATION
+
+The available datasets support descriptive LAI analysis within compatible experimental designs.
+Ranchi Sentinel-2 observations support exploratory site-level vegetation-index analysis.
+A combined supervised satellite-based LAI prediction model is not currently justified.
+
+Further work requires georeferenced experimental plots, exact field observation dates, compatible LAI measurement methodology and independent field-level validation.
+
+END OF PHASE 6 REPORT

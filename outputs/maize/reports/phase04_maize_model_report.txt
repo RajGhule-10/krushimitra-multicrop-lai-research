@@ -1,0 +1,139 @@
+======================================================================
+PHASE 04: MAIZE BASELINE MODEL REPORT
+======================================================================
+
+VALIDATION STRATEGY
+--------------------------------------------------
+Cross-validation: GroupKFold, maximum 5 folds
+Grouping variable: Farm_ID
+Models: Ridge, Random Forest, Dummy Mean
+Features: ['NDVI', 'EVI', 'GNDVI', 'SAVI', 'NDRE', 'RVI', 'DVI', 'NDMI', 'BNDVI']
+
+OVERALL MODEL COMPARISON
+--------------------------------------------------
+         Dataset         Model  Observations  Unique_Farms  CV_Folds      MAE     RMSE        R2
+        Full_316         Ridge           316            51         5 0.802787 1.030349 -0.057890
+        Full_316 Random Forest           316            51         5 0.805248 1.058905 -0.117342
+        Full_316    Dummy Mean           316            51         5 0.785319 1.008661 -0.013824
+Spatial_Reliable         Ridge           201            50         5 0.632975 0.805392  0.028728
+Spatial_Reliable Random Forest           201            50         5 0.599753 0.772515  0.106407
+Spatial_Reliable    Dummy Mean           201            50         5 0.636808 0.819430 -0.005425
+Original_Phase03         Ridge           183            48         5 0.809037 1.054844 -0.006585
+Original_Phase03 Random Forest           183            48         5 0.787974 1.037697  0.025873
+Original_Phase03    Dummy Mean           183            48         5 0.797708 1.054242 -0.005437
+
+FOLD METRICS
+--------------------------------------------------
+         Dataset         Model  Fold  Train_Observations  Test_Observations  Train_Farms  Test_Farms      MAE     RMSE            R2
+        Full_316         Ridge     1                 253                 63           41          10 0.731063 0.953776  5.465317e-02
+        Full_316         Ridge     2                 253                 63           41          10 0.991327 1.221827 -1.509372e-01
+        Full_316         Ridge     3                 253                 63           41          10 0.926405 1.093882 -5.779401e-02
+        Full_316         Ridge     4                 251                 65           40          11 0.737765 0.973380 -1.899148e-01
+        Full_316         Ridge     5                 254                 62           41          10 0.626643 0.871972 -7.204155e-02
+        Full_316         Ridge     1                 253                 63           41          10 0.731063 0.953776  5.465317e-02
+        Full_316         Ridge     2                 253                 63           41          10 0.991327 1.221827 -1.509372e-01
+        Full_316         Ridge     3                 253                 63           41          10 0.926405 1.093882 -5.779401e-02
+        Full_316         Ridge     4                 251                 65           40          11 0.737765 0.973380 -1.899148e-01
+        Full_316         Ridge     5                 254                 62           41          10 0.626643 0.871972 -7.204155e-02
+        Full_316 Random Forest     1                 253                 63           41          10 0.752289 1.004135 -4.781082e-02
+        Full_316 Random Forest     2                 253                 63           41          10 0.920263 1.226214 -1.592176e-01
+        Full_316 Random Forest     3                 253                 63           41          10 0.918113 1.166859 -2.036396e-01
+        Full_316 Random Forest     4                 251                 65           40          11 0.778548 0.991780 -2.353253e-01
+        Full_316 Random Forest     5                 254                 62           41          10 0.655495 0.864733 -5.431580e-02
+        Full_316         Ridge     1                 253                 63           41          10 0.731063 0.953776  5.465317e-02
+        Full_316         Ridge     2                 253                 63           41          10 0.991327 1.221827 -1.509372e-01
+        Full_316         Ridge     3                 253                 63           41          10 0.926405 1.093882 -5.779401e-02
+        Full_316         Ridge     4                 251                 65           40          11 0.737765 0.973380 -1.899148e-01
+        Full_316         Ridge     5                 254                 62           41          10 0.626643 0.871972 -7.204155e-02
+        Full_316 Random Forest     1                 253                 63           41          10 0.752289 1.004135 -4.781082e-02
+        Full_316 Random Forest     2                 253                 63           41          10 0.920263 1.226214 -1.592176e-01
+        Full_316 Random Forest     3                 253                 63           41          10 0.918113 1.166859 -2.036396e-01
+        Full_316 Random Forest     4                 251                 65           40          11 0.778548 0.991780 -2.353253e-01
+        Full_316 Random Forest     5                 254                 62           41          10 0.655495 0.864733 -5.431580e-02
+        Full_316    Dummy Mean     1                 253                 63           41          10 0.767202 0.981028 -1.420480e-04
+        Full_316    Dummy Mean     2                 253                 63           41          10 0.937968 1.166781 -4.956852e-02
+        Full_316    Dummy Mean     3                 253                 63           41          10 0.920021 1.088539 -4.748561e-02
+        Full_316    Dummy Mean     4                 251                 65           40          11 0.690184 0.915631 -5.291181e-02
+        Full_316    Dummy Mean     5                 254                 62           41          10 0.611483 0.860926 -4.505250e-02
+Spatial_Reliable         Ridge     1                 160                 41           40          10 0.568521 0.716470  1.432170e-01
+Spatial_Reliable         Ridge     2                 161                 40           40          10 0.652629 0.839945  2.355268e-01
+Spatial_Reliable         Ridge     3                 161                 40           40          10 0.738016 0.937403 -1.702509e-01
+Spatial_Reliable         Ridge     4                 161                 40           40          10 0.708625 0.872105 -2.121986e-01
+Spatial_Reliable         Ridge     5                 161                 40           40          10 0.498698 0.623330  4.787471e-02
+Spatial_Reliable         Ridge     1                 160                 41           40          10 0.568521 0.716470  1.432170e-01
+Spatial_Reliable         Ridge     2                 161                 40           40          10 0.652629 0.839945  2.355268e-01
+Spatial_Reliable         Ridge     3                 161                 40           40          10 0.738016 0.937403 -1.702509e-01
+Spatial_Reliable         Ridge     4                 161                 40           40          10 0.708625 0.872105 -2.121986e-01
+Spatial_Reliable         Ridge     5                 161                 40           40          10 0.498698 0.623330  4.787471e-02
+Spatial_Reliable Random Forest     1                 160                 41           40          10 0.513395 0.631478  3.344340e-01
+Spatial_Reliable Random Forest     2                 161                 40           40          10 0.626634 0.814946  2.803548e-01
+Spatial_Reliable Random Forest     3                 161                 40           40          10 0.642912 0.847549  4.334225e-02
+Spatial_Reliable Random Forest     4                 161                 40           40          10 0.704415 0.899263 -2.888725e-01
+Spatial_Reliable Random Forest     5                 161                 40           40          10 0.513568 0.631612  2.240655e-02
+Spatial_Reliable         Ridge     1                 160                 41           40          10 0.568521 0.716470  1.432170e-01
+Spatial_Reliable         Ridge     2                 161                 40           40          10 0.652629 0.839945  2.355268e-01
+Spatial_Reliable         Ridge     3                 161                 40           40          10 0.738016 0.937403 -1.702509e-01
+Spatial_Reliable         Ridge     4                 161                 40           40          10 0.708625 0.872105 -2.121986e-01
+Spatial_Reliable         Ridge     5                 161                 40           40          10 0.498698 0.623330  4.787471e-02
+Spatial_Reliable Random Forest     1                 160                 41           40          10 0.513395 0.631478  3.344340e-01
+Spatial_Reliable Random Forest     2                 161                 40           40          10 0.626634 0.814946  2.803548e-01
+Spatial_Reliable Random Forest     3                 161                 40           40          10 0.642912 0.847549  4.334225e-02
+Spatial_Reliable Random Forest     4                 161                 40           40          10 0.704415 0.899263 -2.888725e-01
+Spatial_Reliable Random Forest     5                 161                 40           40          10 0.513568 0.631612  2.240655e-02
+Spatial_Reliable    Dummy Mean     1                 160                 41           40          10 0.570017 0.775496 -3.770437e-03
+Spatial_Reliable    Dummy Mean     2                 161                 40           40          10 0.748000 0.961491 -1.730228e-03
+Spatial_Reliable    Dummy Mean     3                 161                 40           40          10 0.708354 0.869557 -6.984492e-03
+Spatial_Reliable    Dummy Mean     4                 161                 40           40          10 0.638006 0.799517 -1.880571e-02
+Spatial_Reliable    Dummy Mean     5                 161                 40           40          10 0.521334 0.661713 -7.299308e-02
+Original_Phase03         Ridge     1                 146                 37           38          10 0.776237 0.961136  4.479795e-02
+Original_Phase03         Ridge     2                 147                 36           39           9 0.707296 0.921301 -1.093361e-02
+Original_Phase03         Ridge     3                 147                 36           39           9 0.875871 1.236286 -1.827791e-02
+Original_Phase03         Ridge     4                 146                 37           38          10 0.942954 1.162987 -9.253484e-02
+Original_Phase03         Ridge     5                 146                 37           38          10 0.741884 0.956064  1.957413e-02
+Original_Phase03         Ridge     1                 146                 37           38          10 0.776237 0.961136  4.479795e-02
+Original_Phase03         Ridge     2                 147                 36           39           9 0.707296 0.921301 -1.093361e-02
+Original_Phase03         Ridge     3                 147                 36           39           9 0.875871 1.236286 -1.827791e-02
+Original_Phase03         Ridge     4                 146                 37           38          10 0.942954 1.162987 -9.253484e-02
+Original_Phase03         Ridge     5                 146                 37           38          10 0.741884 0.956064  1.957413e-02
+Original_Phase03 Random Forest     1                 146                 37           38          10 0.700571 0.873905  2.103148e-01
+Original_Phase03 Random Forest     2                 147                 36           39           9 0.759272 0.975889 -1.342812e-01
+Original_Phase03 Random Forest     3                 147                 36           39           9 0.815787 1.191642  5.393836e-02
+Original_Phase03 Random Forest     4                 146                 37           38          10 0.867800 1.072805  7.033255e-02
+Original_Phase03 Random Forest     5                 146                 37           38          10 0.796416 1.050238 -1.830860e-01
+Original_Phase03         Ridge     1                 146                 37           38          10 0.776237 0.961136  4.479795e-02
+Original_Phase03         Ridge     2                 147                 36           39           9 0.707296 0.921301 -1.093361e-02
+Original_Phase03         Ridge     3                 147                 36           39           9 0.875871 1.236286 -1.827791e-02
+Original_Phase03         Ridge     4                 146                 37           38          10 0.942954 1.162987 -9.253484e-02
+Original_Phase03         Ridge     5                 146                 37           38          10 0.741884 0.956064  1.957413e-02
+Original_Phase03 Random Forest     1                 146                 37           38          10 0.700571 0.873905  2.103148e-01
+Original_Phase03 Random Forest     2                 147                 36           39           9 0.759272 0.975889 -1.342812e-01
+Original_Phase03 Random Forest     3                 147                 36           39           9 0.815787 1.191642  5.393836e-02
+Original_Phase03 Random Forest     4                 146                 37           38          10 0.867800 1.072805  7.033255e-02
+Original_Phase03 Random Forest     5                 146                 37           38          10 0.796416 1.050238 -1.830860e-01
+Original_Phase03    Dummy Mean     1                 146                 37           38          10 0.776673 0.985897 -5.050857e-03
+Original_Phase03    Dummy Mean     2                 147                 36           39           9 0.736544 0.916405 -2.169907e-04
+Original_Phase03    Dummy Mean     3                 147                 36           39           9 0.862799 1.234682 -1.563732e-02
+Original_Phase03    Dummy Mean     4                 146                 37           38          10 0.832982 1.112646 -8.993449e-09
+Original_Phase03    Dummy Mean     5                 146                 37           38          10 0.779648 0.993346 -5.838211e-02
+
+RANDOM FOREST FEATURE IMPORTANCE
+--------------------------------------------------
+Feature     mean      std
+   NDMI 0.192764 0.050723
+  BNDVI 0.177186 0.020461
+    DVI 0.120584 0.017111
+   NDRE 0.117364 0.019324
+  GNDVI 0.112348 0.029204
+    EVI 0.106889 0.013943
+   SAVI 0.074071 0.012263
+   NDVI 0.049950 0.005196
+    RVI 0.048844 0.005290
+
+IMPORTANT NOTES
+--------------------------------------------------
+Metrics are based on pooled out-of-fold predictions.
+GroupKFold keeps observations from the same farm in one fold.
+NDWI was excluded because it is exactly the negative of GNDVI in this dataset.
+The full, spatially reliable, and original-window datasets are evaluated separately.
+Results measure within-dataset farm-held-out performance, not external geographic or seasonal generalization.
+Random Forest feature importance is predictive importance, not causal importance.

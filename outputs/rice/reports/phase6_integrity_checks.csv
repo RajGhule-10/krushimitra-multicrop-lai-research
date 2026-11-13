@@ -1,0 +1,9 @@
+check,status,details
+All-records dataset loaded,PASS,96 records
+Model-candidate dataset loaded,PASS,95 retained records
+Suspicious Ranchi observation preserved,PASS,42.26 should remain in all-records with exclusion flag.
+Suspicious value excluded from candidates,PASS,Suspicious value must not appear in model candidates.
+Source-row identity available,PASS,Source-row identifiers should be populated.
+Kuthulia sowing groups preserved,PASS,Three distinct Kuthulia sowing-date groups expected.
+Satellite acquisition dates available,PASS,Satellite dates should be available.
+Ranchi matching covers retained Ranchi records,PASS,40 matching rows for 40 retained Ranchi records.

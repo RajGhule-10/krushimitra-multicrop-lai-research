@@ -1,0 +1,2 @@
+layer,records,crs,geometry_types,columns
+Ahero - Rice,252,EPSG:3857,{'Polygon': 252},"Parcel Id,Crop Type,Crop Variety,Farmer Name,Phone Number,Sowing/Planting Date,Expected Harvesting Date,Crop Density (Plants Per Sq. Meter),Irrigation Date,Number of Irrigations,Fertilizer (Kg),Final Yield (Kg),Growth Stage 1,Growth Stage 2,Grwoth Stage 3,geometry"

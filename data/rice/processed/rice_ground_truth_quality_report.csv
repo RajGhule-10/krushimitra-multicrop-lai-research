@@ -1,0 +1,5 @@
+location,quality_status,record_count
+Jabalpur,retained,40
+Kuthulia,retained,15
+Ranchi,excluded_suspicious_value,1
+Ranchi,retained,40

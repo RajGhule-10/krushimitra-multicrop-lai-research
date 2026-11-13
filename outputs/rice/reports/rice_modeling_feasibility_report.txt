@@ -1,0 +1,62 @@
+
+KRUSHIMITRA — PHASE 5
+RICE DATASET EDA AND MODELLING FEASIBILITY REPORT
+
+==================================================
+
+1. GROUND-TRUTH DATA
+
+Total retained LAI records: 95
+
+Jabalpur records: 40
+Kuthulia records: 15
+Ranchi records: 40
+
+2. DATA QUALITY
+
+Exact duplicate rows: 0
+
+Suspicious Ranchi value 42.26:
+Preserved in all-records source with exclusion flag.
+
+3. SATELLITE MATCHING
+
+Temporal matches: 24
+Unmatched observations: 16
+
+Matching is site-level temporal matching only.
+No plot-level satellite correspondence is established.
+
+4. MODELLING FEASIBILITY
+
+The three datasets have different experimental designs,
+observation stages and measurement structures.
+
+Jabalpur:
+Variety-level LAI observations.
+
+Kuthulia:
+Treatment-level harvest LAI means.
+
+Ranchi:
+Treatment-level LAI observations.
+
+The Ranchi satellite features represent a general
+100-metre site buffer, not individual experimental plots.
+
+Therefore, a combined supervised LAI model should not
+be trained from these records without further validation
+of observation units, spatial correspondence and
+experimental independence.
+
+5. RECOMMENDATION
+
+Continue collecting rice datasets with:
+- Field-level LAI observations
+- Exact observation dates
+- Georeferenced experimental plots
+- Satellite imagery matching the observation period
+- Clear measurement and replication methodology
+
+==================================================
+END OF REPORT

@@ -1,0 +1,97 @@
+source_row_id,location,observation_date,observation_stage,variety_or_species,latitude,longitude,variety,treatment,lai,measurement_type,source_dataset,quality_status,sowing_date_group,sowing_date,observation_year,observation_month
+Jabalpur_row_002,Jabalpur,2019-07-31,30 DAS,"V1, V2, V3, V4",23.9,79.58,V1,V1,0.87,variety_level_source_value,Jabalpur_2019,retained,,,2019,7
+Jabalpur_row_003,Jabalpur,2019-08-30,60 DAS,"V1, V2, V3, V4",23.9,79.58,V1,V1,1.51,variety_level_source_value,Jabalpur_2019,retained,,,2019,8
+Jabalpur_row_004,Jabalpur,2019-09-29,90 DAS,"V1, V2, V3, V4",23.9,79.58,V1,V1,3.16,variety_level_source_value,Jabalpur_2019,retained,,,2019,9
+Jabalpur_row_005,Jabalpur,2019-11-07,AT HARVEST,"V1, V2, V3, V4",23.9,79.58,V1,V1,0.953,variety_level_source_value,Jabalpur_2019,retained,,,2019,11
+Jabalpur_row_007,Jabalpur,2019-08-14,30 DAS,"V1, V2, V3, V4",23.9,79.58,V1,V1,0.789,variety_level_source_value,Jabalpur_2019,retained,,,2019,8
+Jabalpur_row_008,Jabalpur,2019-09-13,60 DAS,"V1, V2, V3, V4",23.9,79.58,V1,V1,1.37,variety_level_source_value,Jabalpur_2019,retained,,,2019,9
+Jabalpur_row_009,Jabalpur,2019-10-13,90 DAS,"V1, V2, V3, V4",23.9,79.58,V1,V1,3.13,variety_level_source_value,Jabalpur_2019,retained,,,2019,10
+Jabalpur_row_012,Jabalpur,2019-08-29,30 DAS,"V1, V2, V3, V4",23.9,79.58,V1,V1,0.74,variety_level_source_value,Jabalpur_2019,retained,,,2019,8
+Jabalpur_row_013,Jabalpur,2019-09-28,60 DAS,"V1, V2, V3, V4",23.9,79.58,V1,V1,1.35,variety_level_source_value,Jabalpur_2019,retained,,,2019,9
+Jabalpur_row_014,Jabalpur,2019-10-28,90 DAS,"V1, V2, V3, V4",23.9,79.58,V1,V1,3.02,variety_level_source_value,Jabalpur_2019,retained,,,2019,10
+Jabalpur_row_002,Jabalpur,2019-07-31,30 DAS,"V1, V2, V3, V4",23.9,79.58,V2,V2,0.66,variety_level_source_value,Jabalpur_2019,retained,,,2019,7
+Jabalpur_row_003,Jabalpur,2019-08-30,60 DAS,"V1, V2, V3, V4",23.9,79.58,V2,V2,1.32,variety_level_source_value,Jabalpur_2019,retained,,,2019,8
+Jabalpur_row_004,Jabalpur,2019-09-29,90 DAS,"V1, V2, V3, V4",23.9,79.58,V2,V2,2.9,variety_level_source_value,Jabalpur_2019,retained,,,2019,9
+Jabalpur_row_005,Jabalpur,2019-11-07,AT HARVEST,"V1, V2, V3, V4",23.9,79.58,V2,V2,0.923,variety_level_source_value,Jabalpur_2019,retained,,,2019,11
+Jabalpur_row_007,Jabalpur,2019-08-14,30 DAS,"V1, V2, V3, V4",23.9,79.58,V2,V2,0.64,variety_level_source_value,Jabalpur_2019,retained,,,2019,8
+Jabalpur_row_008,Jabalpur,2019-09-13,60 DAS,"V1, V2, V3, V4",23.9,79.58,V2,V2,1.22,variety_level_source_value,Jabalpur_2019,retained,,,2019,9
+Jabalpur_row_009,Jabalpur,2019-10-13,90 DAS,"V1, V2, V3, V4",23.9,79.58,V2,V2,2.79,variety_level_source_value,Jabalpur_2019,retained,,,2019,10
+Jabalpur_row_012,Jabalpur,2019-08-29,30 DAS,"V1, V2, V3, V4",23.9,79.58,V2,V2,0.62,variety_level_source_value,Jabalpur_2019,retained,,,2019,8
+Jabalpur_row_013,Jabalpur,2019-09-28,60 DAS,"V1, V2, V3, V4",23.9,79.58,V2,V2,1.2,variety_level_source_value,Jabalpur_2019,retained,,,2019,9
+Jabalpur_row_014,Jabalpur,2019-10-28,90 DAS,"V1, V2, V3, V4",23.9,79.58,V2,V2,2.65,variety_level_source_value,Jabalpur_2019,retained,,,2019,10
+Jabalpur_row_002,Jabalpur,2019-07-31,30 DAS,"V1, V2, V3, V4",23.9,79.58,V3,V3,1.44,variety_level_source_value,Jabalpur_2019,retained,,,2019,7
+Jabalpur_row_003,Jabalpur,2019-08-30,60 DAS,"V1, V2, V3, V4",23.9,79.58,V3,V3,2.78,variety_level_source_value,Jabalpur_2019,retained,,,2019,8
+Jabalpur_row_004,Jabalpur,2019-09-29,90 DAS,"V1, V2, V3, V4",23.9,79.58,V3,V3,4.27,variety_level_source_value,Jabalpur_2019,retained,,,2019,9
+Jabalpur_row_005,Jabalpur,2019-11-07,AT HARVEST,"V1, V2, V3, V4",23.9,79.58,V3,V3,1.093,variety_level_source_value,Jabalpur_2019,retained,,,2019,11
+Jabalpur_row_007,Jabalpur,2019-08-14,30 DAS,"V1, V2, V3, V4",23.9,79.58,V3,V3,1.25,variety_level_source_value,Jabalpur_2019,retained,,,2019,8
+Jabalpur_row_008,Jabalpur,2019-09-13,60 DAS,"V1, V2, V3, V4",23.9,79.58,V3,V3,2.71,variety_level_source_value,Jabalpur_2019,retained,,,2019,9
+Jabalpur_row_009,Jabalpur,2019-10-13,90 DAS,"V1, V2, V3, V4",23.9,79.58,V3,V3,4.19,variety_level_source_value,Jabalpur_2019,retained,,,2019,10
+Jabalpur_row_012,Jabalpur,2019-08-29,30 DAS,"V1, V2, V3, V4",23.9,79.58,V3,V3,1.14,variety_level_source_value,Jabalpur_2019,retained,,,2019,8
+Jabalpur_row_013,Jabalpur,2019-09-28,60 DAS,"V1, V2, V3, V4",23.9,79.58,V3,V3,2.3,variety_level_source_value,Jabalpur_2019,retained,,,2019,9
+Jabalpur_row_014,Jabalpur,2019-10-28,90 DAS,"V1, V2, V3, V4",23.9,79.58,V3,V3,3.95,variety_level_source_value,Jabalpur_2019,retained,,,2019,10
+Jabalpur_row_002,Jabalpur,2019-07-31,30 DAS,"V1, V2, V3, V4",23.9,79.58,V4,V4,1.09,variety_level_source_value,Jabalpur_2019,retained,,,2019,7
+Jabalpur_row_003,Jabalpur,2019-08-30,60 DAS,"V1, V2, V3, V4",23.9,79.58,V4,V4,2.2,variety_level_source_value,Jabalpur_2019,retained,,,2019,8
+Jabalpur_row_004,Jabalpur,2019-09-29,90 DAS,"V1, V2, V3, V4",23.9,79.58,V4,V4,3.77,variety_level_source_value,Jabalpur_2019,retained,,,2019,9
+Jabalpur_row_005,Jabalpur,2019-11-07,AT HARVEST,"V1, V2, V3, V4",23.9,79.58,V4,V4,0.97,variety_level_source_value,Jabalpur_2019,retained,,,2019,11
+Jabalpur_row_007,Jabalpur,2019-08-14,30 DAS,"V1, V2, V3, V4",23.9,79.58,V4,V4,1.07,variety_level_source_value,Jabalpur_2019,retained,,,2019,8
+Jabalpur_row_008,Jabalpur,2019-09-13,60 DAS,"V1, V2, V3, V4",23.9,79.58,V4,V4,2.09,variety_level_source_value,Jabalpur_2019,retained,,,2019,9
+Jabalpur_row_009,Jabalpur,2019-10-13,90 DAS,"V1, V2, V3, V4",23.9,79.58,V4,V4,3.36,variety_level_source_value,Jabalpur_2019,retained,,,2019,10
+Jabalpur_row_012,Jabalpur,2019-08-29,30 DAS,"V1, V2, V3, V4",23.9,79.58,V4,V4,0.92,variety_level_source_value,Jabalpur_2019,retained,,,2019,8
+Jabalpur_row_013,Jabalpur,2019-09-28,60 DAS,"V1, V2, V3, V4",23.9,79.58,V4,V4,1.82,variety_level_source_value,Jabalpur_2019,retained,,,2019,9
+Jabalpur_row_014,Jabalpur,2019-10-28,90 DAS,"V1, V2, V3, V4",23.9,79.58,V4,V4,3.21,variety_level_source_value,Jabalpur_2019,retained,,,2019,10
+Kuthulia_row_005,Kuthulia,2019-09-30,At harvest,MTU-1010,24.3,80.15,MTU-1010,1,0.97,treatment_level_mean,Kuthulia_2019,retained,KUT_S1,2019-07-04,2019,9
+Kuthulia_row_010,Kuthulia,2019-10-28,At harvest,MTU-1010,24.3,80.15,MTU-1010,1,0.9,treatment_level_mean,Kuthulia_2019,retained,KUT_S2,2019-07-19,2019,10
+Kuthulia_row_015,Kuthulia,2019-10-28,At harvest,MTU-1010,24.3,80.15,MTU-1010,1,0.87,treatment_level_mean,Kuthulia_2019,retained,KUT_S3,2019-08-03,2019,10
+Kuthulia_row_005,Kuthulia,2019-09-30,At harvest,MTU-1010,24.3,80.15,MTU-1010,2,0.99,treatment_level_mean,Kuthulia_2019,retained,KUT_S1,2019-07-04,2019,9
+Kuthulia_row_010,Kuthulia,2019-10-28,At harvest,MTU-1010,24.3,80.15,MTU-1010,2,0.92,treatment_level_mean,Kuthulia_2019,retained,KUT_S2,2019-07-19,2019,10
+Kuthulia_row_015,Kuthulia,2019-10-28,At harvest,MTU-1010,24.3,80.15,MTU-1010,2,0.89,treatment_level_mean,Kuthulia_2019,retained,KUT_S3,2019-08-03,2019,10
+Kuthulia_row_005,Kuthulia,2019-09-30,At harvest,MTU-1010,24.3,80.15,MTU-1010,3,1.15,treatment_level_mean,Kuthulia_2019,retained,KUT_S1,2019-07-04,2019,9
+Kuthulia_row_010,Kuthulia,2019-10-28,At harvest,MTU-1010,24.3,80.15,MTU-1010,3,1.07,treatment_level_mean,Kuthulia_2019,retained,KUT_S2,2019-07-19,2019,10
+Kuthulia_row_015,Kuthulia,2019-10-28,At harvest,MTU-1010,24.3,80.15,MTU-1010,3,1.03,treatment_level_mean,Kuthulia_2019,retained,KUT_S3,2019-08-03,2019,10
+Kuthulia_row_005,Kuthulia,2019-09-30,At harvest,MTU-1010,24.3,80.15,MTU-1010,4,1.11,treatment_level_mean,Kuthulia_2019,retained,KUT_S1,2019-07-04,2019,9
+Kuthulia_row_010,Kuthulia,2019-10-28,At harvest,MTU-1010,24.3,80.15,MTU-1010,4,1.02,treatment_level_mean,Kuthulia_2019,retained,KUT_S2,2019-07-19,2019,10
+Kuthulia_row_015,Kuthulia,2019-10-28,At harvest,MTU-1010,24.3,80.15,MTU-1010,4,1.0,treatment_level_mean,Kuthulia_2019,retained,KUT_S3,2019-08-03,2019,10
+Kuthulia_row_005,Kuthulia,2019-09-30,At harvest,MTU-1010,24.3,80.15,MTU-1010,5,1.02,treatment_level_mean,Kuthulia_2019,retained,KUT_S1,2019-07-04,2019,9
+Kuthulia_row_010,Kuthulia,2019-10-28,At harvest,MTU-1010,24.3,80.15,MTU-1010,5,0.99,treatment_level_mean,Kuthulia_2019,retained,KUT_S2,2019-07-19,2019,10
+Kuthulia_row_015,Kuthulia,2019-10-28,At harvest,MTU-1010,24.3,80.15,MTU-1010,5,0.99,treatment_level_mean,Kuthulia_2019,retained,KUT_S3,2019-08-03,2019,10
+Ranchi_row_002,Ranchi,2019-08-15,30 DAT,IR64 drt1 _T1,23.17,85.19,IR64 drt1,1,2.19,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_003,Ranchi,2019-09-14,60 DAT,IR64 drt1 _T1,23.17,85.19,IR64 drt1,1,3.46,treatment_level_source_value,Ranchi_2019,retained,,,2019,9
+Ranchi_row_004,Ranchi,2019-10-14,90 DAT,IR64 drt1 _T1,23.17,85.19,IR64 drt1,1,4.26,treatment_level_source_value,Ranchi_2019,retained,,,2019,10
+Ranchi_row_007,Ranchi,2019-08-15,30 DAT,Naveen_T2,23.17,85.19,Naveen,2,2.17,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_008,Ranchi,2019-09-14,60 DAT,Naveen_T2,23.17,85.19,Naveen,2,3.33,treatment_level_source_value,Ranchi_2019,retained,,,2019,9
+Ranchi_row_009,Ranchi,2019-10-14,90 DAT,Naveen_T2,23.17,85.19,Naveen,2,4.16,treatment_level_source_value,Ranchi_2019,retained,,,2019,10
+Ranchi_row_012,Ranchi,2019-08-21,30 DAT,IR64 drt1_T3,23.17,85.19,IR64 drt1,3,2.15,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_013,Ranchi,2019-09-20,60 DAT,IR64 drt1_T3,23.17,85.19,IR64 drt1,3,3.3,treatment_level_source_value,Ranchi_2019,retained,,,2019,9
+Ranchi_row_014,Ranchi,2019-10-20,90 DAT,IR64 drt1_T3,23.17,85.19,IR64 drt1,3,4.14,treatment_level_source_value,Ranchi_2019,retained,,,2019,10
+Ranchi_row_017,Ranchi,2019-08-21,30 DAT,Naveen_T4,23.17,85.19,Naveen,4,2.13,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_018,Ranchi,2019-09-20,60 DAT,Naveen_T4,23.17,85.19,Naveen,4,3.26,treatment_level_source_value,Ranchi_2019,retained,,,2019,9
+Ranchi_row_019,Ranchi,2019-10-20,90 DAT,Naveen_T4,23.17,85.19,Naveen,4,3.82,treatment_level_source_value,Ranchi_2019,retained,,,2019,10
+Ranchi_row_020,Ranchi,2019-11-16,AT HARVEST,Naveen_T4,23.17,85.19,Naveen,4,42.26,treatment_level_source_value,Ranchi_2019,excluded_suspicious_value,,,2019,11
+Ranchi_row_022,Ranchi,2019-08-15,30 DAT,IR64 drt1 _T5,23.17,85.19,IR64 drt1,5,2.14,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_023,Ranchi,2019-09-14,60 DAT,IR64 drt1 _T5,23.17,85.19,IR64 drt1,5,3.24,treatment_level_source_value,Ranchi_2019,retained,,,2019,9
+Ranchi_row_024,Ranchi,2019-10-14,90 DAT,IR64 drt1 _T5,23.17,85.19,IR64 drt1,5,3.8,treatment_level_source_value,Ranchi_2019,retained,,,2019,10
+Ranchi_row_027,Ranchi,2019-08-15,30 DAT,Naveen _T6,23.17,85.19,Naveen,6,2.11,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_028,Ranchi,2019-09-14,60 DAT,Naveen _T6,23.17,85.19,Naveen,6,3.23,treatment_level_source_value,Ranchi_2019,retained,,,2019,9
+Ranchi_row_029,Ranchi,2019-10-14,90 DAT,Naveen _T6,23.17,85.19,Naveen,6,3.64,treatment_level_source_value,Ranchi_2019,retained,,,2019,10
+Ranchi_row_032,Ranchi,2019-08-21,30 DAT,IR64 drt1_T7,23.17,85.19,IR64 drt1,7,2.16,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_033,Ranchi,2019-09-20,60 DAT,IR64 drt1_T7,23.17,85.19,IR64 drt1,7,3.24,treatment_level_source_value,Ranchi_2019,retained,,,2019,9
+Ranchi_row_034,Ranchi,2019-10-20,90 DAT,IR64 drt1_T7,23.17,85.19,IR64 drt1,7,4.06,treatment_level_source_value,Ranchi_2019,retained,,,2019,10
+Ranchi_row_037,Ranchi,2019-08-21,30 DAT,Naveen_T8,23.17,85.19,Naveen,8,2.1,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_038,Ranchi,2019-09-20,60 DAT,Naveen_T8,23.17,85.19,Naveen,8,3.16,treatment_level_source_value,Ranchi_2019,retained,,,2019,9
+Ranchi_row_039,Ranchi,2019-10-20,90 DAT,Naveen_T8,23.17,85.19,Naveen,8,3.91,treatment_level_source_value,Ranchi_2019,retained,,,2019,10
+Ranchi_row_042,Ranchi,2019-08-15,30 DAT,IR64 drt1 _T9,23.17,85.19,IR64 drt1,9,2.18,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_043,Ranchi,2019-09-14,60 DAT,IR64 drt1 _T9,23.17,85.19,IR64 drt1,9,3.39,treatment_level_source_value,Ranchi_2019,retained,,,2019,9
+Ranchi_row_047,Ranchi,2019-08-15,30 DAT,Naveen _T10,23.17,85.19,Naveen,10,2.08,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_048,Ranchi,2019-09-14,60 DAT,Naveen _T10,23.17,85.19,Naveen,10,3.31,treatment_level_source_value,Ranchi_2019,retained,,,2019,9
+Ranchi_row_052,Ranchi,2019-08-21,30 DAT,IR64 drt1_T11,23.17,85.19,IR64 drt1,11,2.04,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_053,Ranchi,2019-09-20,60 DAT,IR64 drt1_T11,23.17,85.19,IR64 drt1,11,3.06,treatment_level_source_value,Ranchi_2019,retained,,,2019,9
+Ranchi_row_057,Ranchi,2019-08-21,30 DAT,Naveen_T12,23.17,85.19,Naveen,12,2.06,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_058,Ranchi,2019-09-20,60 DAT,Naveen_T12,23.17,85.19,Naveen,12,3.03,treatment_level_source_value,Ranchi_2019,retained,,,2019,9
+Ranchi_row_062,Ranchi,2019-08-15,30 DAT,IR64 drt1 _T13,23.17,85.19,IR64 drt1,13,2.05,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_063,Ranchi,2019-09-14,60 DAT,IR64 drt1 _T13,23.17,85.19,IR64 drt1,13,2.94,treatment_level_source_value,Ranchi_2019,retained,,,2019,9
+Ranchi_row_067,Ranchi,2019-08-15,30 DAT,Naveen _T14,23.17,85.19,Naveen,14,2.02,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_068,Ranchi,2019-09-14,60 DAT,Naveen _T14,23.17,85.19,Naveen,14,3.02,treatment_level_source_value,Ranchi_2019,retained,,,2019,9
+Ranchi_row_072,Ranchi,2019-08-21,30 DAT,IR64 drt1_T15,23.17,85.19,IR64 drt1,15,1.98,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_073,Ranchi,2019-09-20,60 DAT,IR64 drt1_T15,23.17,85.19,IR64 drt1,15,3.16,treatment_level_source_value,Ranchi_2019,retained,,,2019,9
+Ranchi_row_077,Ranchi,2019-08-21,30 DAT,Naveen_T16,23.17,85.19,Naveen,16,1.96,treatment_level_source_value,Ranchi_2019,retained,,,2019,8
+Ranchi_row_078,Ranchi,2019-09-20,60 DAT,Naveen_T16,23.17,85.19,Naveen,16,2.89,treatment_level_source_value,Ranchi_2019,retained,,,2019,9

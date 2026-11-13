@@ -1,0 +1,16 @@
+Outer_Fold,Model,Best_Parameters,Inner_CV_MAE
+1,Ridge_Full,"{""model__alpha"": 0.1}",0.6449253145074602
+1,RandomForest_Full,"{""max_depth"": 8, ""max_features"": 1.0, ""min_samples_leaf"": 2}",0.6392186654716276
+1,RandomForest_Reduced,"{""max_depth"": 8, ""max_features"": 0.7, ""min_samples_leaf"": 2}",0.6462702020678752
+2,Ridge_Full,"{""model__alpha"": 100}",0.6123646304089343
+2,RandomForest_Full,"{""max_depth"": 8, ""max_features"": 0.7, ""min_samples_leaf"": 2}",0.6269976507035955
+2,RandomForest_Reduced,"{""max_depth"": 8, ""max_features"": 0.7, ""min_samples_leaf"": 4}",0.6402249054812386
+3,Ridge_Full,"{""model__alpha"": 1}",0.5925042371510523
+3,RandomForest_Full,"{""max_depth"": 8, ""max_features"": 0.7, ""min_samples_leaf"": 2}",0.6157034286366669
+3,RandomForest_Reduced,"{""max_depth"": 8, ""max_features"": 0.7, ""min_samples_leaf"": 4}",0.5931133049868933
+4,Ridge_Full,"{""model__alpha"": 0.1}",0.6081072609733635
+4,RandomForest_Full,"{""max_depth"": 8, ""max_features"": 1.0, ""min_samples_leaf"": 2}",0.5457831843103929
+4,RandomForest_Reduced,"{""max_depth"": 8, ""max_features"": 1.0, ""min_samples_leaf"": 2}",0.5372922455028062
+5,Ridge_Full,"{""model__alpha"": 100}",0.6737094543965139
+5,RandomForest_Full,"{""max_depth"": 8, ""max_features"": 0.7, ""min_samples_leaf"": 2}",0.6760060487391962
+5,RandomForest_Reduced,"{""max_depth"": 8, ""max_features"": 0.7, ""min_samples_leaf"": 2}",0.6702919461513968

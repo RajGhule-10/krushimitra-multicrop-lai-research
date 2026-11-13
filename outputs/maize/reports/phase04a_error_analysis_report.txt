@@ -1,0 +1,207 @@
+======================================================================
+PHASE 04A: CORRECTED MAIZE ERROR ANALYSIS
+======================================================================
+
+MODEL COMPARISON
+--------------------------------------------------
+         Dataset         Model  Observations  Unique_Farms  CV_Folds      MAE     RMSE        R2
+        Full_316         Ridge           316            51         5 0.802787 1.030349 -0.057890
+        Full_316 Random Forest           316            51         5 0.805248 1.058905 -0.117342
+        Full_316    Dummy Mean           316            51         5 0.785319 1.008661 -0.013824
+Spatial_Reliable         Ridge           201            50         5 0.632975 0.805392  0.028728
+Spatial_Reliable Random Forest           201            50         5 0.599753 0.772515  0.106407
+Spatial_Reliable    Dummy Mean           201            50         5 0.636808 0.819430 -0.005425
+Original_Phase03         Ridge           183            48         5 0.809037 1.054844 -0.006585
+Original_Phase03 Random Forest           183            48         5 0.787974 1.037697  0.025873
+Original_Phase03    Dummy Mean           183            48         5 0.797708 1.054242 -0.005437
+
+FOLD METRICS
+--------------------------------------------------
+         Dataset         Model  Fold  Train_Observations  Test_Observations  Train_Farms  Test_Farms      MAE     RMSE            R2
+        Full_316         Ridge     1                 253                 63           41          10 0.731063 0.953776  5.465317e-02
+        Full_316         Ridge     2                 253                 63           41          10 0.991327 1.221827 -1.509372e-01
+        Full_316         Ridge     3                 253                 63           41          10 0.926405 1.093882 -5.779401e-02
+        Full_316         Ridge     4                 251                 65           40          11 0.737765 0.973380 -1.899148e-01
+        Full_316         Ridge     5                 254                 62           41          10 0.626643 0.871972 -7.204155e-02
+        Full_316 Random Forest     1                 253                 63           41          10 0.752289 1.004135 -4.781082e-02
+        Full_316 Random Forest     2                 253                 63           41          10 0.920263 1.226214 -1.592176e-01
+        Full_316 Random Forest     3                 253                 63           41          10 0.918113 1.166859 -2.036396e-01
+        Full_316 Random Forest     4                 251                 65           40          11 0.778548 0.991780 -2.353253e-01
+        Full_316 Random Forest     5                 254                 62           41          10 0.655495 0.864733 -5.431580e-02
+        Full_316    Dummy Mean     1                 253                 63           41          10 0.767202 0.981028 -1.420480e-04
+        Full_316    Dummy Mean     2                 253                 63           41          10 0.937968 1.166781 -4.956852e-02
+        Full_316    Dummy Mean     3                 253                 63           41          10 0.920021 1.088539 -4.748561e-02
+        Full_316    Dummy Mean     4                 251                 65           40          11 0.690184 0.915631 -5.291181e-02
+        Full_316    Dummy Mean     5                 254                 62           41          10 0.611483 0.860926 -4.505250e-02
+Spatial_Reliable         Ridge     1                 160                 41           40          10 0.568521 0.716470  1.432170e-01
+Spatial_Reliable         Ridge     2                 161                 40           40          10 0.652629 0.839945  2.355268e-01
+Spatial_Reliable         Ridge     3                 161                 40           40          10 0.738016 0.937403 -1.702509e-01
+Spatial_Reliable         Ridge     4                 161                 40           40          10 0.708625 0.872105 -2.121986e-01
+Spatial_Reliable         Ridge     5                 161                 40           40          10 0.498698 0.623330  4.787471e-02
+Spatial_Reliable Random Forest     1                 160                 41           40          10 0.513395 0.631478  3.344340e-01
+Spatial_Reliable Random Forest     2                 161                 40           40          10 0.626634 0.814946  2.803548e-01
+Spatial_Reliable Random Forest     3                 161                 40           40          10 0.642912 0.847549  4.334225e-02
+Spatial_Reliable Random Forest     4                 161                 40           40          10 0.704415 0.899263 -2.888725e-01
+Spatial_Reliable Random Forest     5                 161                 40           40          10 0.513568 0.631612  2.240655e-02
+Spatial_Reliable    Dummy Mean     1                 160                 41           40          10 0.570017 0.775496 -3.770437e-03
+Spatial_Reliable    Dummy Mean     2                 161                 40           40          10 0.748000 0.961491 -1.730228e-03
+Spatial_Reliable    Dummy Mean     3                 161                 40           40          10 0.708354 0.869557 -6.984492e-03
+Spatial_Reliable    Dummy Mean     4                 161                 40           40          10 0.638006 0.799517 -1.880571e-02
+Spatial_Reliable    Dummy Mean     5                 161                 40           40          10 0.521334 0.661713 -7.299308e-02
+Original_Phase03         Ridge     1                 146                 37           38          10 0.776237 0.961136  4.479795e-02
+Original_Phase03         Ridge     2                 147                 36           39           9 0.707296 0.921301 -1.093361e-02
+Original_Phase03         Ridge     3                 147                 36           39           9 0.875871 1.236286 -1.827791e-02
+Original_Phase03         Ridge     4                 146                 37           38          10 0.942954 1.162987 -9.253484e-02
+Original_Phase03         Ridge     5                 146                 37           38          10 0.741884 0.956064  1.957413e-02
+Original_Phase03 Random Forest     1                 146                 37           38          10 0.700571 0.873905  2.103148e-01
+Original_Phase03 Random Forest     2                 147                 36           39           9 0.759272 0.975889 -1.342812e-01
+Original_Phase03 Random Forest     3                 147                 36           39           9 0.815787 1.191642  5.393836e-02
+Original_Phase03 Random Forest     4                 146                 37           38          10 0.867800 1.072805  7.033255e-02
+Original_Phase03 Random Forest     5                 146                 37           38          10 0.796416 1.050238 -1.830860e-01
+Original_Phase03    Dummy Mean     1                 146                 37           38          10 0.776673 0.985897 -5.050857e-03
+Original_Phase03    Dummy Mean     2                 147                 36           39           9 0.736544 0.916405 -2.169907e-04
+Original_Phase03    Dummy Mean     3                 147                 36           39           9 0.862799 1.234682 -1.563732e-02
+Original_Phase03    Dummy Mean     4                 146                 37           38          10 0.832982 1.112646 -8.993449e-09
+Original_Phase03    Dummy Mean     5                 146                 37           38          10 0.779648 0.993346 -5.838211e-02
+
+CAMPAIGN ERROR ANALYSIS
+--------------------------------------------------
+         Dataset         Model  Observations      MAE     RMSE  Mean_Bias   Campaign
+        Full_316    Dummy Mean           135 0.742403 0.899492   0.469909 campaign_1
+        Full_316    Dummy Mean            30 0.638174 0.836467  -0.345996 campaign_2
+        Full_316    Dummy Mean           151 0.852923 1.125504  -0.350388 campaign_3
+        Full_316 Random Forest           135 0.717960 0.920124   0.271476 campaign_1
+        Full_316 Random Forest            30 0.694677 0.937723  -0.292852 campaign_2
+        Full_316 Random Forest           151 0.905254 1.189495  -0.090051 campaign_3
+        Full_316         Ridge           135 0.717873 0.894205   0.380089 campaign_1
+        Full_316         Ridge            30 0.737220 0.966860  -0.388524 campaign_2
+        Full_316         Ridge           151 0.891730 1.149375  -0.271123 campaign_3
+Original_Phase03    Dummy Mean           101 0.682902 0.847969   0.501659 campaign_1
+Original_Phase03    Dummy Mean            82 0.939115 1.262820  -0.617395 campaign_3
+Original_Phase03 Random Forest           101 0.638794 0.807186   0.257138 campaign_1
+Original_Phase03 Random Forest            82 0.971720 1.265156  -0.216438 campaign_3
+Original_Phase03         Ridge           101 0.658072 0.833623   0.365177 campaign_1
+Original_Phase03         Ridge            82 0.994981 1.275642  -0.448863 campaign_3
+Spatial_Reliable    Dummy Mean           123 0.630214 0.796218   0.265570 campaign_1
+Spatial_Reliable    Dummy Mean            20 0.726779 1.005114  -0.660660 campaign_2
+Spatial_Reliable    Dummy Mean            58 0.619769 0.796349  -0.335170 campaign_3
+Spatial_Reliable Random Forest           123 0.580822 0.745007   0.176657 campaign_1
+Spatial_Reliable Random Forest            20 0.513090 0.695369  -0.338226 campaign_2
+Spatial_Reliable Random Forest            58 0.669783 0.851091  -0.239662 campaign_3
+Spatial_Reliable         Ridge           123 0.614985 0.782122   0.226741 campaign_1
+Spatial_Reliable         Ridge            20 0.514390 0.777449  -0.378289 campaign_2
+Spatial_Reliable         Ridge            58 0.712019 0.861541  -0.340135 campaign_3
+
+LAI RANGE ERROR ANALYSIS
+--------------------------------------------------
+         Dataset         Model  Observations      MAE     RMSE  Mean_Bias LAI_Range
+        Full_316    Dummy Mean            16 1.702184 1.717361   1.702184       <=1
+        Full_316    Dummy Mean            95 0.863354 0.904537   0.863354       1-2
+        Full_316    Dummy Mean           124 0.236806 0.274943   0.003542       2-3
+        Full_316    Dummy Mean            56 0.952063 0.998443  -0.952063       3-4
+        Full_316    Dummy Mean            25 2.249119 2.292432  -2.249119        >4
+        Full_316 Random Forest            16 1.681003 1.770425   1.681003       <=1
+        Full_316 Random Forest            95 0.814706 0.978675   0.810989       1-2
+        Full_316 Random Forest           124 0.401387 0.513426   0.054126       2-3
+        Full_316 Random Forest            56 0.834937 0.957244  -0.763371       3-4
+        Full_316 Random Forest            25 2.145470 2.273161  -2.145470        >4
+        Full_316         Ridge            16 1.611526 1.649651   1.611526       <=1
+        Full_316         Ridge            95 0.879789 0.956366   0.879789       1-2
+        Full_316         Ridge           124 0.275932 0.334746  -0.004410       2-3
+        Full_316         Ridge            56 0.961166 1.019063  -0.961166       3-4
+        Full_316         Ridge            25 2.251017 2.306418  -2.251017        >4
+Original_Phase03    Dummy Mean            13 1.563963 1.566750   1.563963       <=1
+Original_Phase03    Dummy Mean            55 0.795735 0.841311   0.795735       1-2
+Original_Phase03    Dummy Mean            76 0.228576 0.268555   0.005999       2-3
+Original_Phase03    Dummy Mean            22 1.107425 1.149830  -1.107425       3-4
+Original_Phase03    Dummy Mean            17 2.361674 2.400769  -2.361674        >4
+Original_Phase03 Random Forest            13 1.306438 1.400104   1.306438       <=1
+Original_Phase03 Random Forest            55 0.713427 0.861390   0.688583       1-2
+Original_Phase03 Random Forest            76 0.435695 0.532407   0.088440       2-3
+Original_Phase03 Random Forest            22 0.850872 1.023839  -0.782232       3-4
+Original_Phase03 Random Forest            17 2.126179 2.251271  -2.126179        >4
+Original_Phase03         Ridge            13 1.581267 1.601332   1.581267       <=1
+Original_Phase03         Ridge            55 0.770879 0.874160   0.769084       1-2
+Original_Phase03         Ridge            76 0.320544 0.404989  -0.026873       2-3
+Original_Phase03         Ridge            22 1.002055 1.061048  -1.002055       3-4
+Original_Phase03         Ridge            17 2.276021 2.313971  -2.276021        >4
+Spatial_Reliable    Dummy Mean            12 1.397983 1.400951   1.397983       <=1
+Spatial_Reliable    Dummy Mean            73 0.611569 0.672325   0.611569       1-2
+Spatial_Reliable    Dummy Mean            86 0.279354 0.345831  -0.219238       2-3
+Spatial_Reliable    Dummy Mean            25 1.228645 1.261547  -1.228645       3-4
+Spatial_Reliable    Dummy Mean             5 2.367514 2.380842  -2.367514        >4
+Spatial_Reliable Random Forest            12 1.207745 1.286869   1.207745       <=1
+Spatial_Reliable Random Forest            73 0.577957 0.686546   0.537895       1-2
+Spatial_Reliable Random Forest            86 0.315522 0.375324  -0.185624       2-3
+Spatial_Reliable Random Forest            25 1.131045 1.243730  -1.131045       3-4
+Spatial_Reliable Random Forest             5 1.691105 1.725445  -1.691105        >4
+Spatial_Reliable         Ridge            12 1.196432 1.211599   1.196432       <=1
+Spatial_Reliable         Ridge            73 0.611966 0.726166   0.604514       1-2
+Spatial_Reliable         Ridge            86 0.338530 0.418760  -0.218690       2-3
+Spatial_Reliable         Ridge            25 1.140460 1.204378  -1.140460       3-4
+Spatial_Reliable         Ridge             5 2.114466 2.141313  -2.114466        >4
+
+EXTRACTION METHOD ERROR ANALYSIS
+--------------------------------------------------
+         Dataset         Model  Observations      MAE     RMSE  Mean_Bias  Extraction_Method
+        Full_316    Dummy Mean           116 0.721838 0.910634  -0.081270          EXACT_GPS
+        Full_316    Dummy Mean           183 0.813967 1.058847   0.061819 EXACT_GPS_ORIGINAL
+        Full_316    Dummy Mean            17 0.910102 1.088238  -0.102137  NEIGHBOURHOOD_30M
+        Full_316 Random Forest           116 0.773256 1.004805   0.023083          EXACT_GPS
+        Full_316 Random Forest           183 0.803834 1.070592   0.080203 EXACT_GPS_ORIGINAL
+        Full_316 Random Forest            17 1.038760 1.270898  -0.181690  NEIGHBOURHOOD_30M
+        Full_316         Ridge           116 0.767609 0.969316  -0.023428          EXACT_GPS
+        Full_316         Ridge           183 0.807894 1.053505   0.018198 EXACT_GPS_ORIGINAL
+        Full_316         Ridge            17 0.987849 1.172578  -0.111522  NEIGHBOURHOOD_30M
+Original_Phase03    Dummy Mean           183 0.797708 1.054242   0.000225 EXACT_GPS_ORIGINAL
+Original_Phase03 Random Forest           183 0.787974 1.037697   0.044935 EXACT_GPS_ORIGINAL
+Original_Phase03         Ridge           183 0.809037 1.054844   0.000416 EXACT_GPS_ORIGINAL
+Spatial_Reliable    Dummy Mean            71 0.695427 0.883677  -0.295899          EXACT_GPS
+Spatial_Reliable    Dummy Mean           122 0.603511 0.785189   0.181382 EXACT_GPS_ORIGINAL
+Spatial_Reliable    Dummy Mean             8 0.624348 0.733652  -0.138463  NEIGHBOURHOOD_30M
+Spatial_Reliable Random Forest            71 0.619273 0.758931  -0.128725          EXACT_GPS
+Spatial_Reliable Random Forest           122 0.594288 0.789545   0.097851 EXACT_GPS_ORIGINAL
+Spatial_Reliable Random Forest             8 0.509852 0.612960  -0.216796  NEIGHBOURHOOD_30M
+Spatial_Reliable         Ridge            71 0.678395 0.857066  -0.094009          EXACT_GPS
+Spatial_Reliable         Ridge           122 0.611128 0.783336   0.068232 EXACT_GPS_ORIGINAL
+Spatial_Reliable         Ridge             8 0.563049 0.648572  -0.131763  NEIGHBOURHOOD_30M
+
+DATASET-SPECIFIC PERMUTATION IMPORTANCE
+--------------------------------------------------
+         Dataset Feature  Mean_Importance  Std_Importance
+        Full_316   GNDVI         0.018326        0.039525
+        Full_316    NDMI         0.012751        0.042782
+        Full_316     EVI         0.004197        0.025808
+        Full_316     DVI         0.003918        0.031518
+        Full_316   BNDVI         0.003106        0.018626
+        Full_316    NDRE         0.002508        0.043154
+        Full_316    SAVI        -0.005184        0.003493
+        Full_316    NDVI        -0.005224        0.016969
+        Full_316     RVI        -0.005341        0.016235
+Original_Phase03   BNDVI         0.035140        0.039324
+Original_Phase03    NDMI         0.030579        0.041849
+Original_Phase03   GNDVI         0.027104        0.041269
+Original_Phase03     DVI         0.011608        0.013277
+Original_Phase03    SAVI         0.010094        0.009440
+Original_Phase03     EVI         0.009725        0.021197
+Original_Phase03    NDRE         0.006103        0.011168
+Original_Phase03    NDVI         0.004596        0.007711
+Original_Phase03     RVI         0.000187        0.006400
+Spatial_Reliable    NDMI         0.051009        0.060617
+Spatial_Reliable   BNDVI         0.045671        0.042730
+Spatial_Reliable     EVI         0.021804        0.025364
+Spatial_Reliable     DVI         0.007347        0.035137
+Spatial_Reliable    NDRE         0.000524        0.017753
+Spatial_Reliable     RVI         0.000266        0.012730
+Spatial_Reliable    NDVI        -0.000019        0.009365
+Spatial_Reliable    SAVI        -0.001032        0.011167
+Spatial_Reliable   GNDVI        -0.012903        0.022794
+
+OUTPUT VALIDATION
+--------------------------------------------------
+Expected prediction rows: 2100
+Actual prediction rows: 2100
+Duplicate predictions: 0
+Validation: GroupKFold by Farm_ID
+Permutation importance: held-out test folds
+Prediction files contain one OOF prediction per observation, model and dataset variant.

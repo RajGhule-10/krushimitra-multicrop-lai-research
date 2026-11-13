@@ -1,0 +1,4 @@
+check,result,details
+phase4_matching_available,True,40 Phase 4 records loaded.
+phase4_dates_parseable,True,40 valid dates out of 40.
+phase4_status_available,True,"{'site_level_temporal_match_only': 24, 'no_scene_within_10_days': 16}"

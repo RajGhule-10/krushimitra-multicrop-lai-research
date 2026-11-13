@@ -1,0 +1,57 @@
+======================================================================
+PHASE 03D: FINAL MAIZE SATELLITE FEATURE DATASET
+======================================================================
+
+Original Phase 03 successful records: 183
+Phase 03C exact successes: 116
+Phase 03C neighbourhood-only successes: 17
+Rows before deduplication: 316
+Duplicate keys removed: 0
+Final unique observations: 316
+Rows with all 20 features: 316
+
+EXTRACTION METHOD SUMMARY
+--------------------------------------------------
+Satellite_Source  Extraction_Method  observations
+        Phase 03 EXACT_GPS_ORIGINAL           183
+       Phase 03C          EXACT_GPS           116
+       Phase 03C  NEIGHBOURHOOD_30M            17
+
+CAMPAIGN SUMMARY
+--------------------------------------------------
+campaign_id  observations  unique_farms  mean_LAI  min_LAI  max_LAI
+ campaign_1           135            47  1.988074     0.58     5.03
+ campaign_2            30            13  2.804667     1.40     4.69
+ campaign_3           151            51  2.810464     0.00     5.38
+
+SPATIAL QUALITY SUMMARY
+--------------------------------------------------
+inside_matching_parcel: 201
+inside_any_maize_parcel: 262
+spatial_review_required: 115
+
+FEATURE MISSINGNESS
+--------------------------------------------------
+B2       0
+B3       0
+B4       0
+B5       0
+B6       0
+B7       0
+B8       0
+B8A      0
+B11      0
+B12      0
+NDVI     0
+EVI      0
+GNDVI    0
+SAVI     0
+NDRE     0
+RVI      0
+DVI      0
+NDWI     0
+NDMI     0
+BNDVI    0
+
+OUTPUT FILE
+/Users/rajghule/Downloads/KrushiMitra-Research/data/maize/processed/maize_final_satellite_features.csv

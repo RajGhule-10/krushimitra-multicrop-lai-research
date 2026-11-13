@@ -1,0 +1,4 @@
+Campaign,Processed_records,Processed_unique_farms,Original_LAI_measurements,Original_unique_farms,Missing_processed_farms,Unexpected_processed_farms,LAI_mismatches,Duplicate_processed_farms,Missing_feature_values,Infinite_feature_values
+1,43,43,156,52,9,0,0,0,0,0
+2,60,60,222,74,14,0,0,0,0,0
+3,74,74,222,74,0,0,0,0,0,0

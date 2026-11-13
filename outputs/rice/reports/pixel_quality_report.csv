@@ -1,0 +1,6 @@
+acquisition_date,pixel_count,missing_band_values,missing_index_values,missing_coordinates,duplicate_coordinate_date_records,unique_images,mean_scene_cloud_percentage
+ALL_DATES,309,0,0,0,0,4,15.943419362459545
+2019-09-20,77,0,0,0,0,1,22.178827
+2019-10-10,76,0,0,0,0,1,26.826463999999994
+2019-10-15,78,0,0,0,0,1,1.6745699999999994
+2019-10-30,78,0,0,0,0,1,13.45281

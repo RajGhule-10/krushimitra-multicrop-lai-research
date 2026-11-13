@@ -1,0 +1,8 @@
+assessment,value,interpretation
+Total Ranchi ground-truth records,40,Retained Ranchi observations assessed.
+Temporal matches,24,Ground-truth dates with a satellite acquisition within the selected 10-day window.
+Unmatched records,16,No selected satellite acquisition within the 10-day matching window.
+Temporal match rate percentage,60.0,Temporal availability only; not model accuracy or plot-level matching quality.
+Satellite acquisition dates,4,Number of unique satellite acquisition dates in the site-summary dataset.
+Satellite spatial correspondence,Site-level 100-metre buffer,No experimental plot boundaries or plot-specific satellite samples are available.
+Plot-level LAI validation,Not established,Cannot associate site-buffer satellite features with individual experimental treatments.

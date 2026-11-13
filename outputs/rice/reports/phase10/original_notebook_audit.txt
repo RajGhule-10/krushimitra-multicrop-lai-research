@@ -1,0 +1,1651 @@
+
+================================================================================
+CELL 2
+================================================================================
+...
+0001: ! pip install rasterio==1.4.3 pandas==2.2.3 numpy==1.26.4 matplotlib==3.7.2 openpyxl==3.1.5 scikit-learn==1.2.2 shap==0.44.1 xgboost==2.0.3
+
+================================================================================
+CELL 3
+================================================================================
+...
+0001: import rasterio
+0002: import pandas as pd
+0003: import numpy as np
+0004: import matplotlib
+0005: import openpyxl
+0006: import sklearn
+0007: import shap
+0008: 
+0009: print("rasterio:", rasterio.__version__)
+0010: print("pandas:", pd.__version__)
+0011: print("numpy:", np.__version__)
+0012: print("matplotlib:", matplotlib.__version__)
+0013: print("openpyxl:", openpyxl.__version__)
+
+================================================================================
+CELL 4
+================================================================================
+...
+0001: import warnings
+0002: # Suppress all specific NumPy/scikit-learn warnings shown above:
+0003: warnings.filterwarnings("ignore", message="invalid value encountered in")
+0004: warnings.filterwarnings("ignore", message="X does not have valid feature names, but StandardScaler was fitted with feature names")
+0005: warnings.filterwarnings("ignore", category=RuntimeWarning)
+0006: warnings.filterwarnings("ignore", category=UserWarning)
+
+================================================================================
+CELL 7
+================================================================================
+...
+0001: import rasterio as rio
+0002: import numpy as np
+0003: import matplotlib.pyplot as plt
+0004: 
+0005: # File path
+0006: image_path = "satellite_imagery/10-06-2023_sen2res/S2A_MSIL2A_20230610T074621_N0509_R135_T36MYE_20230610T111702_super_resolved_masked.tif"
+0007: 
+0008: # Read bands and mask NoData (0 assumed as background)
+0009: with rio.open(image_path) as src:
+0010:     rgb = src.read([4, 3, 2]).astype(np.float32)
+0011:     rgb[:, np.all(rgb == 0, axis=0)] = np.nan
+0012: 
+0013: # Normalize and stack RGB channels
+0014: normalize = lambda b: (b - np.nanmin(b)) / (np.nanmax(b) - np.nanmin(b) )
+0015: rgb_img = np.stack([normalize(b) for b in rgb], axis=-1)
+0016: 
+0017: # Set NaNs to white
+0018: rgb_img[np.isnan(rgb_img).any(axis=2)] = [1, 1, 1]
+0019: 
+0020: # Display
+0021: plt.figure(figsize=(10, 10))
+0022: plt.imshow(rgb_img)
+
+================================================================================
+CELL 9
+================================================================================
+...
+0001: with rio.open(image_path) as src:
+0002:     num_bands = min(12, src.count)
+0003:     print("\nMasked Band Statistics (First 12 Bands):")
+0004:     for band in range(1, num_bands + 1):
+0005:         band_data = src.read(band).astype(np.float32)
+0006:         valid_pixels = band_data[~np.isnan(band_data)]
+0007:         min_val = valid_pixels.min() if valid_pixels.size > 0 else np.nan
+0008:         max_val = valid_pixels.max() if valid_pixels.size > 0 else np.nan
+0009:         print(f"Band {band}: Min = {min_val}, Max = {max_val}, Shape = {band_data.shape}")
+
+================================================================================
+CELL 11
+================================================================================
+...
+0001: import numpy.ma as ma
+0002: 
+0003: # 1. Load satellite bands
+0004: image_path = "satellite_imagery/10-06-2023_sen2res/S2A_MSIL2A_20230610T074621_N0509_R135_T36MYE_20230610T111702_super_resolved_masked.tif"
+0005: with rio.open(image_path) as src:
+0006:     bands = src.read(range(1, 13), masked=True).astype(np.float32).filled(np.nan)
+0007:     profile = src.profile
+0008: bands = np.where(np.isinf(bands), np.nan, bands)
+0009: B1, B2, B3, B4, B5, B6, B7, B8, B8A, B9, B11, B12 = bands
+0010: 
+0011: def safe_divide(num, denom, eps=1e-10):
+0012:     valid_mask = (
+0013:         (np.abs(denom) >= eps) &
+0014:         (~np.isnan(num)) & (~np.isnan(denom)) &
+0015:         (~np.isinf(num)) & (~np.isinf(denom))
+0016:     )
+0017:     result = np.full_like(num, np.nan)
+0018:     result[valid_mask] = num[valid_mask] / denom[valid_mask]
+0019:     return result
+0020: 
+0021: area_mask = ~np.isnan(B4)
+0022: 
+0023: vegetation_indices = {
+0024:     "NDVI": safe_divide(B8 - B4, B8 + B4),
+0025:     "GNDVI": safe_divide(B6 - B3, B6 + B3),
+...
+0047:     "REDRIG2": safe_divide((B8 + B8A) / 2, (B5 + B6 + B7) / 3), 
+0048: }
+0049: 
+0050: def percentile_mask(arr, area_mask, label, pmin=0.05, pmax=99.9):
+0051:     raw = arr.filled(np.nan) if isinstance(arr, ma.MaskedArray) else arr
+0052:     lower, upper = np.nanpercentile(raw, pmin), np.nanpercentile(raw, pmax)
+0053:     print(f"{label}: {pmin}th={lower:.2f}, {pmax}th={upper:.2f}")
+0054:     mask = (raw >= lower) & (raw <= upper)
+0055:     final_mask = (~area_mask) | (~np.isfinite(raw)) | (~mask)
+0056:     return ma.masked_array(raw, mask=final_mask)
+0057: 
+0058: 
+0059: # --- Mask all other indices (excluding EVI) ---
+0060: for name, value in vegetation_indices.items():
+0061:     if name not in ('EVI'):
+0062:         mask = (~area_mask) | (~np.isfinite(value))
+0063:         vegetation_indices[name] = ma.masked_array(value, mask=mask)
+0064: 
+0065: # --- Mask EVI with custom logic as before ---
+0066: evi = vegetation_indices['EVI']
+0067: evi_mask = (~area_mask) | (~np.isfinite(evi)) | (evi == 0.0)
+0068: vegetation_indices['EVI'] = ma.masked_array(evi, mask=evi_mask)
+0069: 
+0070: # --- Print statistics using masked arrays ---
+0071: print("\nVegetation Index Statistics:")
+0072: for name, value in vegetation_indices.items():
+0073:     print(f"{name}: Min = {value.min():.4f}, Max = {value.max():.4f}, "
+0074:           f"Mean = {value.mean():.4f}, Median = {ma.median(value):.4f}")
+
+================================================================================
+CELL 14
+================================================================================
+...
+0001: import geopandas as gpd
+0002: from rasterio.warp import transform
+0003: 
+0004: shapefile_path = "Parcels Geodatabase_updated/SHP/Ahero.shp"
+0005: 
+0006: with rio.open(image_path) as src:
+0007:     rgb = src.read([4, 3, 2]).astype(np.float32)
+0008:     rgb[:, np.all(rgb == 0, axis=0)] = np.nan
+0009:     bounds = src.bounds
+0010:     raster_crs = src.crs
+0011: 
+0012: normalize = lambda b: (b - np.nanmin(b)) / (np.nanmax(b) - np.nanmin(b))
+0013: rgb_img = np.stack([normalize(b) for b in rgb], axis=-1)
+0014: rgb_img[np.isnan(rgb_img).any(axis=2)] = [1, 1, 1]
+0015: 
+0016: # Transform all 4 corners from raster CRS to lon/lat
+0017: xs = [bounds.left, bounds.left, bounds.right, bounds.right]
+0018: ys = [bounds.bottom, bounds.top, bounds.bottom, bounds.top]
+0019: 
+0020: lon_corners, lat_corners = transform(raster_crs, {'init': 'epsg:4326'}, xs, ys)
+0021: 
+0022: lon_min, lon_max = min(lon_corners), max(lon_corners)
+0023: lat_min, lat_max = min(lat_corners), max(lat_corners)
+0024: extent = [lon_min, lon_max, lat_min, lat_max]
+0025: 
+0026: # Read and reproject shapefile
+0027: gdf_shape = gpd.read_file(shapefile_path)
+0028: if gdf_shape.crs != raster_crs:
+0029:     gdf_shape = gdf_shape.to_crs(epsg=4326)
+0030: 
+0031: # Plot
+0032: fig, ax = plt.subplots(figsize=(10, 10))
+0033: ax.imshow(rgb_img, extent=extent, origin='upper')
+0034: gdf_shape.plot(ax=ax, facecolor='none', edgecolor='blue', linewidth=2, label="Ahero Farms Boundary")
+0035: 
+0036: ax.set_xlabel("Longitude")
+0037: ax.set_ylabel("Latitude")
+0038: plt.title("RGB (True Colour) Image with Polygon Boundaries for 10/06/2023")
+
+================================================================================
+CELL 16
+================================================================================
+...
+0001: import rasterio
+0002: import pandas as pd
+0003: from rasterio.features import geometry_mask
+0004: import geopandas as gpd
+0005: 
+0006: # Open the raster to get transform and CRS
+0007: with rio.open(image_path) as src:
+0008:     transform = src.transform
+0009:     raster_crs = src.crs
+0010:     raster_shape = (src.height, src.width)
+0011: 
+0012: # Ensure shapefile is in the same CRS as raster
+0013: if gdf_shape.crs != raster_crs:
+0014:     gdf_shape = gdf_shape.to_crs(raster_crs)
+0015: 
+0016: # Prepare a DataFrame to store mean indices per polygon
+0017: results = []
+0018: 
+0019: for idx, row in gdf_shape.iterrows():
+0020:     geom = row.geometry
+0021:     parcel_id = row['Parcel Id']
+0022: 
+0023:     # Create a mask for the polygon: True outside polygon, False inside
+0024:     mask = geometry_mask([geom], invert=True, transform=transform, out_shape=raster_shape)
+0025: 
+0026:     # Dictionary to hold mean values for this polygon
+0027:     mean_values = {'Parcel Id': parcel_id}
+0028: 
+0029:     for index_name, index_array in vegetation_indices.items():
+0030:         # index_array is a masked array, combine with polygon mask
+0031:         combined_mask = index_array.mask | (~mask)  # mask pixels outside polygon or already masked
+0032: 
+0033:         # Masked array for polygon pixels only
+0034:         polygon_values = np.ma.masked_array(index_array.data, mask=combined_mask)
+0035: 
+0036:         # Compute mean ignoring masked pixels; if all masked, mean will be masked
+0037:         mean_val = polygon_values.mean()
+0038: 
+0039:         mean_values[index_name] = mean_val if not np.ma.is_masked(mean_val) else np.nan
+0040: 
+0041:     results.append(mean_values)
+0042: 
+0043: # Convert results to DataFrame for easy viewing/export
+
+================================================================================
+CELL 18
+================================================================================
+...
+0001: file_path = 'LAI/Rice_campaign_1_LAI_Data.csv'
+0002: df_lai_campaign_1 = pd.read_csv(file_path)
+0003: print(df_lai_campaign_1)
+
+================================================================================
+CELL 19
+================================================================================
+...
+0001: # Select only the LAI and Farm_ID columns
+0002: selected_df_lai_campaign_1 = df_lai_campaign_1[['LAI', 'Farm_ID']]
+0003: 
+0004: # Group by Farm_ID and calculate the mean LAI for each farm
+0005: mean_lai_per_farm_campaign_1 = selected_df_lai_campaign_1.groupby('Farm_ID').mean().reset_index()
+0006: 
+0007: mean_lai_per_farm_campaign_1.head()
+
+================================================================================
+CELL 21
+================================================================================
+...
+0005: # Read the CSV file into a DataFrame
+0006: df_rice_dualex_campaign_1 = pd.read_csv(file_path)
+0007: 
+0008: mean_chl_campaign_1 = df_rice_dualex_campaign_1[['farm_id', 'Chl']]
+0009: 
+0010: print (mean_chl_campaign_1.head())
+
+================================================================================
+CELL 23
+================================================================================
+...
+0001: # 1. Read the shapefile
+0002: shapefile_path = "Parcels Geodatabase_updated/SHP/Ahero.shp"
+0003: gdf = gpd.read_file(shapefile_path)
+0004: 
+0005: # 2. Inspect columns to find the farm ID
+0006: print(gdf.columns)
+
+================================================================================
+CELL 24
+================================================================================
+...
+0001: import pandas as pd
+0002: 
+0003: # Function to normalize farm IDs
+0004: def normalize_farm_id(farm_id):
+0005:     # Adjust normalization based on the ID format
+0006:     return f"{farm_id[:2]}{int(farm_id[2:]):02d}"
+0007: 
+0008: # Function to prepare a dataframe
+0009: def prepare_df(df, id_col):
+0010:     df = df.rename(columns={id_col: 'Farm_ID'}).copy()
+0011:     df['Farm_ID_norm'] = df['Farm_ID'].apply(normalize_farm_id)
+0012:     return df
+0013: 
+0014: # Prepare normalized IDs in gdf
+0015: gdf['Farm_ID_norm'] = gdf['Parcel Id'].apply(normalize_farm_id)
+0016: 
+0017: # Prepare main dataframes with normalized IDs
+0018: df_main = prepare_df(df_rice_campaign_1_vis_means, 'Parcel Id')
+0019: df_lai = prepare_df(mean_lai_per_farm_campaign_1, 'Farm_ID').drop(columns=['Farm_ID'])
+0020: df_dualex = prepare_df(mean_chl_campaign_1, 'farm_id').drop(columns=['Farm_ID'])
+0021: 
+0022: # Merge all dataframes stepwise on normalized Farm_ID (exclude df_means_prepared and SNAP columns)
+0023: merged_df = (
+0024:     df_main
+0025:     .merge(df_lai[['Farm_ID_norm', 'LAI']], on='Farm_ID_norm', how='left')
+0026:     .merge(df_dualex[['Farm_ID_norm', 'Chl']], on='Farm_ID_norm', how='left')
+0027:     .merge(gdf[['Farm_ID_norm']], on='Farm_ID_norm', how='left')
+0028: )
+0029: 
+0030: # Clean up column names and arrange columns
+0031: merged_df.drop(columns=['Farm_ID'], inplace=True, errors='ignore')
+0032: merged_df.rename(columns={'Farm_ID_norm': 'Farm_ID'}, inplace=True)
+0033: 
+0034: # Move Farm_ID column to the front
+0035: cols = merged_df.columns.tolist()
+0036: cols.insert(0, cols.pop(cols.index('Farm_ID')))
+0037: merged_df = merged_df[cols]
+0038: 
+0039: # Add Growth_stage column with fixed value
+0040: merged_df['Growth_stage'] = 'vegetative'
+
+================================================================================
+CELL 25
+================================================================================
+...
+0001: final_df_rice_campaign_1 = merged_df_campaign_1.dropna().copy()
+0002: final_df_rice_campaign_1
+
+================================================================================
+CELL 26
+================================================================================
+...
+0007:     "NDII8", "SAVI", "SVHI", "NPCI", "CI783-B8", "CI783-B8A", "NBIB8", "NBIB8A", "MSI8A", "LSWI8", "NMDI", "REDRIG2"
+0008: ]
+0009: 
+0010: targets = ['LAI', 'Chl']
+0011: 
+0012: results = []
+0013: for vi in veg_indices:
+0014:     for target in targets:
+
+================================================================================
+CELL 28
+================================================================================
+...
+0010:     "NDVI", "GNDVI", "NDVIre", "NDREI", "CIRE", "VREI", "EVI", "mND₇₀₅", "TCI", "mSR740", "AFRI₁₅₀₀", "AFRI₂₁₀₀",
+0011:     "NDII8", "SAVI", "SVHI", "NPCI", "CI783-B8", "CI783-B8A", "NBIB8", "NBIB8A", "MSI8A", "LSWI8", "NMDI", "REDRIG2"
+0012: ]
+0013: target_cols = ['LAI', 'LCC']
+0014: cols_of_interest = feature_cols + target_cols
+0015: 
+0016: def plot_corr_heatmap(df, stage_name):
+0017:     # Calculate correlation matrix for selected columns
+
+================================================================================
+CELL 33
+================================================================================
+...
+0001: # File path
+0002: image_path = "satellite_imagery/20-07-2023_sen2res/S2A_MSIL2A_20230720T074621_N0509_R135_T36MYE_20230720T111256_super_resolved_masked.tif"
+0003: 
+0004: # Read bands and mask NoData (0 assumed as background)
+0005: with rio.open(image_path) as src:
+0006:     rgb = src.read([4, 3, 2]).astype(np.float32)
+0007:     rgb[:, np.all(rgb == 0, axis=0)] = np.nan
+0008: 
+0009: # Normalize and stack RGB channels
+0010: normalize = lambda b: (b - np.nanmin(b)) / (np.nanmax(b) - np.nanmin(b) )
+0011: rgb_img = np.stack([normalize(b) for b in rgb], axis=-1)
+0012: 
+0013: # Set NaNs to white
+0014: rgb_img[np.isnan(rgb_img).any(axis=2)] = [1, 1, 1]
+0015: 
+0016: # Display
+0017: plt.figure(figsize=(10, 10))
+0018: plt.imshow(rgb_img)
+
+================================================================================
+CELL 34
+================================================================================
+...
+0001: with rio.open(image_path) as src:
+0002:     num_bands = min(12, src.count)
+0003:     print("\nMasked Band Statistics (First 12 Bands):")
+0004:     for band in range(1, num_bands + 1):
+0005:         band_data = src.read(band).astype(np.float32)
+0006:         valid_pixels = band_data[~np.isnan(band_data)]
+0007:         min_val = valid_pixels.min() if valid_pixels.size > 0 else np.nan
+0008:         max_val = valid_pixels.max() if valid_pixels.size > 0 else np.nan
+0009:         print(f"Band {band}: Min = {min_val}, Max = {max_val}, Shape = {band_data.shape}")
+
+================================================================================
+CELL 35
+================================================================================
+...
+0001: # Read bands and scale to surface reflectance
+0002: with rio.open(image_path) as src:
+0003:     bands = src.read(range(1, 13), masked=True).astype(np.float32).filled(np.nan)
+0004: 
+0005: # Replace inf with nan in all bands
+0006: bands = np.where(np.isinf(bands), np.nan, bands)
+0007: 
+0008: # Unpack bands
+0009: B1, B2, B3, B4, B5, B6, B7, B8, B8A, B9, B11, B12 = bands
+0010: 
+0011: def safe_divide(num, denom, eps=1e-10):
+0012:     valid_mask = (
+0013:         (np.abs(denom) >= eps) &
+0014:         (~np.isnan(num)) & (~np.isnan(denom)) &
+0015:         (~np.isinf(num)) & (~np.isinf(denom))
+0016:     )
+0017:     result = np.full_like(num, np.nan)
+0018:     result[valid_mask] = num[valid_mask] / denom[valid_mask]
+0019:     return result
+0020: 
+0021: # Define area mask (example: valid where B4 is not nan)
+0022: area_mask = ~np.isnan(B4)
+0023: 
+0024: # Calculate all indices as before, with new additions
+0025: vegetation_indices = {
+0026:     "NDVI": safe_divide(B8 - B4, B8 + B4),
+...
+0049:     "REDRIG2": safe_divide((B8 + B8A) / 2, (B5 + B6 + B7) / 3), 
+0050: }
+0051: 
+0052: # Masking for EVI: mask out invalid, unwanted, and zero EVI pixels
+0053: evi = vegetation_indices['EVI']
+0054: evi_mask = (~area_mask) | (~np.isfinite(evi)) | (evi == 0.0)
+0055: evi_masked = ma.masked_array(evi, mask=evi_mask)
+0056: vegetation_indices['EVI'] = evi_masked
+0057: 
+0058: # Mask other indices (excluding EVI) with area_mask and invalids
+0059: for name, value in vegetation_indices.items():
+0060:     if name != 'EVI':
+0061:         mask = (~area_mask) | (~np.isfinite(value))
+0062:         vegetation_indices[name] = ma.masked_array(value, mask=mask)
+0063: 
+0064: # Print statistics using masked arrays (masked values ignored)
+0065: print("Vegetation Index Statistics:")
+0066: for name, value in vegetation_indices.items():
+0067:     print(f"{name}: Min = {value.min():.4f}, Max = {value.max():.4f}, Mean = {value.mean():.4f}, Median = {ma.median(value):.4f}")
+
+================================================================================
+CELL 37
+================================================================================
+...
+0001: import geopandas as gpd
+0002: from rasterio.warp import transform
+0003: 
+0004: shapefile_path = "Parcels Geodatabase_updated/SHP/Ahero.shp"
+0005: 
+0006: with rio.open(image_path) as src:
+0007:     rgb = src.read([4, 3, 2]).astype(np.float32)
+0008:     rgb[:, np.all(rgb == 0, axis=0)] = np.nan
+0009:     bounds = src.bounds
+0010:     raster_crs = src.crs
+0011: 
+0012: normalize = lambda b: (b - np.nanmin(b)) / (np.nanmax(b) - np.nanmin(b))
+0013: rgb_img = np.stack([normalize(b) for b in rgb], axis=-1)
+0014: rgb_img[np.isnan(rgb_img).any(axis=2)] = [1, 1, 1]
+0015: 
+0016: # Transform all 4 corners from raster CRS to lon/lat
+0017: xs = [bounds.left, bounds.left, bounds.right, bounds.right]
+0018: ys = [bounds.bottom, bounds.top, bounds.bottom, bounds.top]
+0019: 
+0020: lon_corners, lat_corners = transform(raster_crs, {'init': 'epsg:4326'}, xs, ys)
+0021: 
+0022: lon_min, lon_max = min(lon_corners), max(lon_corners)
+0023: lat_min, lat_max = min(lat_corners), max(lat_corners)
+0024: extent = [lon_min, lon_max, lat_min, lat_max]
+0025: 
+0026: # Read and reproject shapefile
+0027: gdf_shape = gpd.read_file(shapefile_path)
+0028: if gdf_shape.crs != raster_crs:
+0029:     gdf_shape = gdf_shape.to_crs(epsg=4326)
+0030: 
+0031: # Plot
+0032: fig, ax = plt.subplots(figsize=(10, 10))
+0033: ax.imshow(rgb_img, extent=extent, origin='upper')
+0034: gdf_shape.plot(ax=ax, facecolor='none', edgecolor='blue', linewidth=2, label="Ahero Farms Boundary")
+0035: 
+0036: ax.set_xlabel("Longitude")
+0037: ax.set_ylabel("Latitude")
+0038: plt.title("RGB (True Colour) Image with Polygon Boundaries for 20/07/2023")
+
+================================================================================
+CELL 38
+================================================================================
+...
+0001: # Open the raster to get transform and CRS (if not already open)
+0002: with rio.open(image_path) as src:
+0003:     transform = src.transform
+0004:     raster_crs = src.crs
+0005:     raster_shape = (src.height, src.width)
+0006: 
+0007: # Ensure shapefile is in the same CRS as raster
+0008: if gdf_shape.crs != raster_crs:
+0009:     gdf_shape = gdf_shape.to_crs(raster_crs)
+0010: 
+0011: # Prepare a DataFrame to store mean indices per polygon
+0012: results = []
+0013: 
+0014: for idx, row in gdf_shape.iterrows():
+0015:     geom = row.geometry
+0016:     parcel_id = row['Parcel Id']
+0017: 
+0018:     # Create a mask for the polygon: True outside polygon, False inside
+0019:     mask = geometry_mask([geom], invert=True, transform=transform, out_shape=raster_shape)
+0020: 
+0021:     # Dictionary to hold mean values for this polygon
+0022:     mean_values = {'Parcel Id': parcel_id}
+0023: 
+0024:     for index_name, index_array in vegetation_indices.items():
+0025:         # index_array is a masked array, combine with polygon mask
+0026:         combined_mask = index_array.mask | (~mask)  # mask pixels outside polygon or already masked
+0027: 
+0028:         # Masked array for polygon pixels only
+0029:         polygon_values = np.ma.masked_array(index_array.data, mask=combined_mask)
+0030: 
+0031:         # Compute mean ignoring masked pixels; if all masked, mean will be masked
+0032:         mean_val = polygon_values.mean()
+0033: 
+0034:         mean_values[index_name] = mean_val if not np.ma.is_masked(mean_val) else np.nan
+0035: 
+0036:     results.append(mean_values)
+0037: 
+0038: # Convert results to DataFrame for easy viewing/export
+
+================================================================================
+CELL 39
+================================================================================
+...
+0001: file_path = 'LAI/Rice_campaign_2_LAI_Data.csv'
+0002: df_lai_campaign_2 = pd.read_csv(file_path)
+0003: print(df_lai_campaign_2)
+
+================================================================================
+CELL 40
+================================================================================
+...
+0001: # Select only the LAI and Farm_ID columns
+0002: selected_df_lai_campaign_2 = df_lai_campaign_2[['LAI', 'Farm_ID']]
+0003: 
+0004: # Group by Farm_ID and calculate the mean LAI for each farm
+0005: mean_lai_per_farm_campaign_2 = selected_df_lai_campaign_2.groupby('Farm_ID').mean().reset_index()
+0006: 
+0007: mean_lai_per_farm_campaign_2
+
+================================================================================
+CELL 41
+================================================================================
+...
+0005: # Read the CSV file into a DataFrame
+0006: df_rice_dualex_campaign_2 = pd.read_csv(file_path)
+0007: 
+0008: averaged_df_rice_dualex_campaign_2 = df_rice_dualex_campaign_2[['farm_id','Chl']]
+0009: 
+0010: print (averaged_df_rice_dualex_campaign_2.head())
+
+================================================================================
+CELL 42
+================================================================================
+...
+0001: 
+0002: # Function to normalize farm IDs
+0003: def normalize_farm_id(farm_id):
+0004:     # Adjust normalization based on ID format
+0005:     return f"{farm_id[:2]}{int(farm_id[2:]):02d}"
+0006: 
+0007: # Function to prepare a dataframe (rename id col and add normalized ids)
+0008: def prepare_df(df, id_col):
+0009:     df = df.rename(columns={id_col: 'Farm_ID'}).copy()
+0010:     df['Farm_ID_norm'] = df['Farm_ID'].apply(normalize_farm_id)
+0011:     return df
+0012: 
+0013: # Prepare normalized IDs in gdf
+0014: gdf['Farm_ID_norm'] = gdf['Parcel Id'].apply(normalize_farm_id)
+0015: 
+0016: # Prepare main dataframes with normalized IDs
+0017: df_main = prepare_df(df_rice_campaign_2_vis_means, 'Parcel Id')
+0018: df_lai = prepare_df(mean_lai_per_farm_campaign_2, 'Farm_ID').drop(columns=['Farm_ID'])
+0019: df_dualex = prepare_df(averaged_df_rice_dualex_campaign_2, 'farm_id').drop(columns=['Farm_ID'])
+0020: 
+0021: # (No SNAP means dataframe preparation or use)
+0022: 
+0023: # Merge all dataframes stepwise on normalized Farm_ID (exclude SNAP/lai_snap/lcc_snap)
+0024: merged_df = (
+0025:     df_main
+0026:     .merge(df_lai[['Farm_ID_norm', 'LAI']], on='Farm_ID_norm', how='left')
+0027:     .merge(df_dualex[['Farm_ID_norm', 'Chl']], on='Farm_ID_norm', how='left')
+0028:     .merge(gdf[['Farm_ID_norm']], on='Farm_ID_norm', how='left')
+0029: )
+0030: 
+0031: # Clean up column names and arrange columns
+0032: merged_df.drop(columns=['Farm_ID'], inplace=True, errors='ignore')
+0033: merged_df.rename(columns={'Farm_ID_norm': 'Farm_ID'}, inplace=True)
+0034: 
+0035: # Move Farm_ID column to the front
+0036: cols = merged_df.columns.tolist()
+0037: cols.insert(0, cols.pop(cols.index('Farm_ID')))
+0038: merged_df = merged_df[cols]
+0039: 
+0040: # Add Growth_stage column with fixed value
+0041: merged_df['Growth_stage'] = 'reproductive'
+
+================================================================================
+CELL 43
+================================================================================
+...
+0001: final_df_rice_campaign_2 = merged_df_campaign_2.dropna().copy()
+0002: 
+0003: final_df_rice_campaign_2
+
+================================================================================
+CELL 44
+================================================================================
+...
+0006:    "NDVI", "GNDVI", "NDVIre", "NDREI", "CIRE", "VREI", "EVI", "mND₇₀₅", "TCI", "mSR740", "AFRI₁₅₀₀", "AFRI₂₁₀₀",
+0007:     "NDII8", "SAVI", "SVHI", "NPCI", "CI783-B8", "CI783-B8A", "NBIB8", "NBIB8A", "MSI8A", "LSWI8", "NMDI", "REDRIG2"
+0008: ]
+0009: targets = ['LAI', 'Chl']
+0010: 
+0011: results = []
+0012: for vi in veg_indices:
+0013:     for target in targets:
+
+================================================================================
+CELL 45
+================================================================================
+...
+0002: # Rename column 'Chl' to 'LCC'
+0003: final_df_rice_campaign_2 = final_df_rice_campaign_2.rename(columns={'Chl': 'LCC'})
+0004: 
+0005: # List of columns to include in correlation (vegetation indices + LAI + targets)
+0006: feature_cols = [
+0007:    "NDVI", "GNDVI", "NDVIre", "NDREI", "CIRE", "VREI", "EVI", "mND₇₀₅", "TCI", "mSR740", "AFRI₁₅₀₀", "AFRI₂₁₀₀",
+0008:     "NDII8", "SAVI", "SVHI", "NPCI", "CI783-B8", "CI783-B8A", "NBIB8", "NBIB8A", "MSI8A", "LSWI8", "NMDI", "REDRIG2"
+0009: ]
+0010: 
+0011: def plot_corr_heatmap(df, stage_name):
+0012:     corr = df[cols_of_interest].corr()
+0013:     # Remove LAI, LCC from y-axis (rows)
+0014:     drop_rows = ['LAI', 'LCC']
+0015:     corr_subset = corr.drop(index=drop_rows)
+0016: 
+0017:     plt.figure(figsize=(30, 16))
+0018:     heatmap = sns.heatmap(
+
+================================================================================
+CELL 48
+================================================================================
+...
+0001: # File path
+0002: image_path = "satellite_imagery/14-08-2023_sen2res/S2B_MSIL2A_20230814T074619_N0509_R135_T36MYE_20230814T111031_super_resolved_masked.tif"
+0003: 
+0004: # Read bands and mask NoData (0 assumed as background)
+0005: with rio.open(image_path) as src:
+0006:     rgb = src.read([4, 3, 2]).astype(np.float32)
+0007:     rgb[:, np.all(rgb == 0, axis=0)] = np.nan
+0008: 
+0009: # Normalize and stack RGB channels
+0010: normalize = lambda b: (b - np.nanmin(b)) / (np.nanmax(b) - np.nanmin(b) )
+0011: rgb_img = np.stack([normalize(b) for b in rgb], axis=-1)
+0012: 
+0013: # Set NaNs to white
+0014: rgb_img[np.isnan(rgb_img).any(axis=2)] = [1, 1, 1]
+0015: 
+0016: # Display
+0017: plt.figure(figsize=(10, 10))
+0018: plt.imshow(rgb_img)
+
+================================================================================
+CELL 49
+================================================================================
+...
+0001: with rio.open(image_path) as src:
+0002:     num_bands = min(12, src.count)
+0003:     print("\nMasked Band Statistics (First 12 Bands):")
+0004:     for band in range(1, num_bands + 1):
+0005:         band_data = src.read(band).astype(np.float32)
+0006:         valid_pixels = band_data[~np.isnan(band_data)]
+0007:         min_val = valid_pixels.min() if valid_pixels.size > 0 else np.nan
+0008:         max_val = valid_pixels.max() if valid_pixels.size > 0 else np.nan
+0009:         print(f"Band {band}: Min = {min_val}, Max = {max_val}, Shape = {band_data.shape}")
+
+================================================================================
+CELL 50
+================================================================================
+...
+0001: 
+0002: # Read bands and scale to surface reflectance
+0003: with rio.open(image_path) as src:
+0004:     bands = src.read(range(1, 13), masked=True).astype(np.float32).filled(np.nan)
+0005: 
+0006: # Replace inf with nan in all bands
+0007: bands = np.where(np.isinf(bands), np.nan, bands)
+0008: 
+0009: # Unpack bands
+0010: B1, B2, B3, B4, B5, B6, B7, B8, B8A, B9, B11, B12 = bands
+0011: 
+0012: def safe_divide(num, denom, eps=1e-10):
+0013:     valid_mask = (
+0014:         (np.abs(denom) >= eps) &
+0015:         (~np.isnan(num)) & (~np.isnan(denom)) &
+0016:         (~np.isinf(num)) & (~np.isinf(denom))
+0017:     )
+0018:     result = np.full_like(num, np.nan)
+0019:     result[valid_mask] = num[valid_mask] / denom[valid_mask]
+0020:     return result
+0021: 
+0022: # Define area mask (example: valid where B4 is not nan)
+0023: area_mask = ~np.isnan(B4)
+0024: 
+0025: # Calculate all indices as before, with new additions
+0026: vegetation_indices = {
+0027:     "NDVI": safe_divide(B8 - B4, B8 + B4),
+...
+0050:     "REDRIG2": safe_divide((B8 + B8A) / 2, (B5 + B6 + B7) / 3), 
+0051: }
+0052: 
+0053: # Masking for EVI: mask out invalid, unwanted, and zero EVI pixels
+0054: evi = vegetation_indices['EVI']
+0055: evi_mask = (~area_mask) | (~np.isfinite(evi)) | (evi == 0.0)
+0056: evi_masked = ma.masked_array(evi, mask=evi_mask)
+0057: vegetation_indices['EVI'] = evi_masked
+0058: 
+0059: # Mask other indices (excluding EVI) with area_mask and invalids
+0060: for name, value in vegetation_indices.items():
+0061:     if name != 'EVI':
+0062:         mask = (~area_mask) | (~np.isfinite(value))
+0063:         vegetation_indices[name] = ma.masked_array(value, mask=mask)
+0064: 
+0065: # Print statistics using masked arrays (masked values ignored)
+0066: print("Vegetation Index Statistics:")
+0067: for name, value in vegetation_indices.items():
+0068:     print(f"{name}: Min = {value.min():.4f}, Max = {value.max():.4f}, Mean = {value.mean():.4f}, Median = {ma.median(value):.4f}")
+
+================================================================================
+CELL 52
+================================================================================
+...
+0001: import geopandas as gpd
+0002: from rasterio.warp import transform, transform_bounds  # Add transform_bounds here
+0003: 
+0004: shapefile_path = "Parcels Geodatabase_updated/SHP/Ahero.shp"
+0005: 
+0006: # Read bands and mask NoData (assuming 0 is background/NoData)
+0007: with rio.open(image_path) as src:
+0008:     # Read bands 4, 3, 2 (NIR, Red, Green)
+0009:     rgb = src.read([4, 3, 2]).astype(np.float32)
+0010:     rgb[:, np.all(rgb == 0, axis=0)] = np.nan
+0011:     bounds = src.bounds
+0012:     raster_crs = src.crs
+0013: 
+0014: # Normalize and stack RGB channels
+0015: normalize = lambda b: (b - np.nanmin(b)) / (np.nanmax(b) - np.nanmin(b))
+0016: rgb_img = np.stack([normalize(b) for b in rgb], axis=-1)
+0017: 
+0018: # Set NaNs to white
+0019: rgb_img[np.isnan(rgb_img).any(axis=2)] = [1, 1, 1]
+0020: 
+0021: # Convert raster bounds to EPSG:4326 (WGS84 degrees)
+0022: bounds_deg = transform_bounds(raster_crs, "EPSG:4326", bounds.left, bounds.bottom, bounds.right, bounds.top)
+0023: extent = [bounds_deg[0], bounds_deg[2], bounds_deg[1], bounds_deg[3]]
+0024: 
+0025: # Read the shapefile and reproject to EPSG:4326 if needed
+0026: gdf_shape = gpd.read_file(shapefile_path)
+...
+0030: # Plot
+0031: fig, ax = plt.subplots(figsize=(10, 10))
+0032: ax.imshow(rgb_img, extent=extent, origin='upper')
+0033: gdf_shape.plot(ax=ax, facecolor='none', edgecolor='blue', linewidth=2, label="Ahero Farms Boundary")
+0034: 
+0035: ax.set_xlabel("Longitude (degrees)")
+0036: ax.set_ylabel("Latitude (degrees)")
+0037: plt.title("RGB (True Colour) Image with Polygon Boundaries for 14/08/2023")
+
+================================================================================
+CELL 53
+================================================================================
+...
+0001: # Open the raster to get transform and CRS (if not already open)
+0002: with rio.open(image_path) as src:
+0003:     transform = src.transform
+0004:     raster_crs = src.crs
+0005:     raster_shape = (src.height, src.width)
+0006: 
+0007: # Ensure shapefile is in the same CRS as raster
+0008: if gdf_shape.crs != raster_crs:
+0009:     gdf_shape = gdf_shape.to_crs(raster_crs)
+0010: 
+0011: # Prepare a DataFrame to store mean indices per polygon
+0012: results = []
+0013: 
+0014: for idx, row in gdf_shape.iterrows():
+0015:     geom = row.geometry
+0016:     parcel_id = row['Parcel Id']
+0017: 
+0018:     # Create a mask for the polygon: True outside polygon, False inside
+0019:     mask = geometry_mask([geom], invert=True, transform=transform, out_shape=raster_shape)
+0020: 
+0021:     # Dictionary to hold mean values for this polygon
+0022:     mean_values = {'Parcel Id': parcel_id}
+0023: 
+0024:     for index_name, index_array in vegetation_indices.items():
+0025:         # index_array is a masked array, combine with polygon mask
+0026:         combined_mask = index_array.mask | (~mask)  # mask pixels outside polygon or already masked
+0027: 
+0028:         # Masked array for polygon pixels only
+0029:         polygon_values = np.ma.masked_array(index_array.data, mask=combined_mask)
+0030: 
+0031:         # Compute mean ignoring masked pixels; if all masked, mean will be masked
+0032:         mean_val = polygon_values.mean()
+0033: 
+0034:         mean_values[index_name] = mean_val if not np.ma.is_masked(mean_val) else np.nan
+0035: 
+0036:     results.append(mean_values)
+0037: 
+0038: # Convert results to DataFrame for easy viewing/export
+
+================================================================================
+CELL 54
+================================================================================
+...
+0001: file_path = 'LAI/Rice_campaign_3_LAI_Data.csv'
+0002: df_lai_campaign_3 = pd.read_csv(file_path)
+0003: print(df_lai_campaign_3)
+
+================================================================================
+CELL 55
+================================================================================
+...
+0001: # Select only the LAI and Farm_ID columns
+0002: selected_df_lai_campaign_3 = df_lai_campaign_3[['LAI', 'Farm_ID']]
+0003: 
+0004: # Group by Farm_ID and calculate the mean LAI for each farm
+0005: mean_lai_per_farm_campaign_3 = selected_df_lai_campaign_3.groupby('Farm_ID').mean().reset_index()
+0006: 
+0007: mean_lai_per_farm_campaign_3
+
+================================================================================
+CELL 56
+================================================================================
+...
+0005: # Read the CSV file into a DataFrame
+0006: df_rice_dualex_campaign_3 = pd.read_csv(file_path)
+0007: 
+0008: averaged_df_rice_dualex_campaign_3 = df_rice_dualex_campaign_3[['farm_id','Chl']]
+0009: 
+0010: print (averaged_df_rice_dualex_campaign_3)
+
+================================================================================
+CELL 57
+================================================================================
+...
+0001: 
+0002: # Function to normalize farm IDs
+0003: def normalize_farm_id(farm_id):
+0004:     # Adjust normalization based on your ID format
+0005:     return f"{farm_id[:2]}{int(farm_id[2:]):02d}"
+0006: 
+0007: # Function to prepare a dataframe (rename id col and add normalized ids)
+0008: def prepare_df(df, id_col):
+0009:     df = df.rename(columns={id_col: 'Farm_ID'}).copy()
+0010:     df['Farm_ID_norm'] = df['Farm_ID'].apply(normalize_farm_id)
+0011:     return df
+0012: 
+0013: # Prepare normalized IDs in gdf
+0014: gdf['Farm_ID_norm'] = gdf['Parcel Id'].apply(normalize_farm_id)
+0015: 
+0016: # Prepare main dataframes with normalized IDs
+0017: df_main = prepare_df(df_rice_campaign_3_vis_means, 'Parcel Id')
+0018: df_lai = prepare_df(mean_lai_per_farm_campaign_3, 'Farm_ID').drop(columns=['Farm_ID'])
+0019: df_dualex = prepare_df(averaged_df_rice_dualex_campaign_3, 'farm_id').drop(columns=['Farm_ID'])
+0020: 
+0021: # (Skip all code/merging for SNAP/lai_snap/lcc_snap)
+0022: merged_df = (
+0023:     df_main
+0024:     .merge(df_lai[['Farm_ID_norm', 'LAI']], on='Farm_ID_norm', how='left')
+0025:     .merge(df_dualex[['Farm_ID_norm', 'Chl']], on='Farm_ID_norm', how='left')
+0026:     .merge(gdf[['Farm_ID_norm']], on='Farm_ID_norm', how='left')
+0027: )
+0028: 
+0029: # Clean up column names and arrange columns
+0030: merged_df.drop(columns=['Farm_ID'], inplace=True, errors='ignore')
+0031: merged_df.rename(columns={'Farm_ID_norm': 'Farm_ID'}, inplace=True)
+0032: 
+0033: # Move Farm_ID column to the front
+0034: cols = merged_df.columns.tolist()
+0035: cols.insert(0, cols.pop(cols.index('Farm_ID')))
+0036: merged_df = merged_df[cols]
+0037: 
+0038: # Add Growth_stage column with fixed value
+0039: merged_df['Growth_stage'] = 'ripening'
+
+================================================================================
+CELL 58
+================================================================================
+...
+0001: final_df_rice_campaign_3 = merged_df_campaign_3.dropna().copy()
+0002: final_df_rice_campaign_3
+
+================================================================================
+CELL 59
+================================================================================
+...
+0004:     "NDVI", "GNDVI", "NDVIre", "NDREI", "CIRE", "VREI", "EVI", "mND₇₀₅", "TCI", "mSR740", "AFRI₁₅₀₀", "AFRI₂₁₀₀",
+0005:     "NDII8", "SAVI", "SVHI", "NPCI", "CI783-B8", "CI783-B8A", "NBIB8", "NBIB8A", "MSI8A", "LSWI8", "NMDI", "REDRIG2"
+0006: ]
+0007: targets = ['LAI', 'Chl']
+0008: 
+0009: results = []
+0010: for vi in veg_indices:
+0011:     for target in targets:
+
+================================================================================
+CELL 60
+================================================================================
+...
+0002: # Rename column 'Chl' to 'LCC'
+0003: final_df_rice_campaign_3 = final_df_rice_campaign_3.rename(columns={'Chl': 'LCC'})
+0004: 
+0005: # List of columns to include in correlation (vegetation indices + LAI + targets)
+0006: feature_cols = [
+0007:     "NDVI", "GNDVI", "NDVIre", "NDREI", "CIRE", "VREI", "EVI", "mND₇₀₅", "TCI", "mSR740", "AFRI₁₅₀₀", "AFRI₂₁₀₀",
+0008:     "NDII8", "SAVI", "SVHI", "NPCI", "CI783-B8", "CI783-B8A", "NBIB8", "NBIB8A", "MSI8A", "LSWI8", "NMDI", "REDRIG2"
+0009: ]
+0010: 
+0011: def plot_corr_heatmap(df, stage_name):
+0012:     corr = df[cols_of_interest].corr()
+0013:     # Remove LAI, LCC from y-axis (rows)
+0014:     drop_rows = ['LAI', 'LCC']
+0015:     corr_subset = corr.drop(index=drop_rows)
+0016: 
+0017:     plt.figure(figsize=(30, 16))
+0018:     heatmap = sns.heatmap(
+
+================================================================================
+CELL 63
+================================================================================
+...
+0007: # Use glob to get list of all csv files in folder matching your pattern
+0008: csv_files = glob.glob(folder_path + "final_df_rice_campaign_*.csv")
+0009: 
+0010: # Read and concatenate all CSV files into a single DataFrame
+0011: final_combined_rice_df = pd.concat(map(pd.read_csv, csv_files), ignore_index=True)
+0012: 
+0013: 
+0014: #preview the combined DataFrame
+0015: final_combined_rice_df
+
+================================================================================
+CELL 64
+================================================================================
+...
+0004:    "NDVI", "GNDVI", "NDVIre", "NDREI", "CIRE", "VREI", "EVI", "mND₇₀₅", "TCI", "mSR740", "AFRI₁₅₀₀", "AFRI₂₁₀₀",
+0005:     "NDII8", "SAVI", "SVHI", "NPCI", "CI783-B8", "CI783-B8A", "NBIB8", "NBIB8A", "MSI8A", "LSWI8", "NMDI", "REDRIG2"
+0006: ]
+0007: targets = ['LAI', 'LCC']
+0008: 
+0009: results = []
+0010: for vi in veg_indices:
+0011:     for target in targets:
+
+================================================================================
+CELL 65
+================================================================================
+...
+0002: cols_of_interest = [
+0003:     "NDVI", "GNDVI", "NDVIre", "NDREI", "CIRE", "VREI", "EVI", "mND₇₀₅", "TCI", "mSR740", "AFRI₁₅₀₀", "AFRI₂₁₀₀",
+0004:     "NDII8", "SAVI", "SVHI", "NPCI", "CI783-B8", "CI783-B8A", "NBIB8", "NBIB8A", "MSI8A", "LSWI8", "NMDI", "REDRIG2",
+0005:     'LAI', 'LCC'  # Include targets
+0006: ]
+0007: 
+0008: 
+0009: def plot_corr_heatmap(df):
+0010:     corr = df[cols_of_interest].corr()
+0011:     # Remove LAI, LCC from y-axis (rows)
+0012:     drop_rows = ['LAI', 'LCC']
+0013:     corr_subset = corr.drop(index=drop_rows)
+0014: 
+0015:     plt.figure(figsize=(30, 16))  # larger figure for readability
+0016:     heatmap = sns.heatmap(
+
+================================================================================
+CELL 68
+================================================================================
+...
+0001: # Calculate multiple statistics grouped by Growth_stage
+0002: stats = combined_df.groupby('Growth_stage')[[ 'LAI', 'LCC']].agg(['mean', 'median', 'min', 'max'])
+0003: 
+0004: print("Grouped statistics by Growth_stage (mean, median, min, max):")
+0005: stats
+
+================================================================================
+CELL 69
+================================================================================
+...
+0017:    "NDVI", "GNDVI", "NDVIre", "NDREI", "CIRE", "VREI", "EVI", "mND₇₀₅", "TCI", "mSR740", "AFRI₁₅₀₀", "AFRI₂₁₀₀",
+0018:     "NDII8", "SAVI", "SVHI", "NPCI", "CI783-B8", "CI783-B8A", "NBIB8", "NBIB8A", "MSI8A", "LSWI8", "NMDI", "REDRIG2"
+0019: ]
+0020: targets = ['LAI', 'LCC']
+0021: 
+0022: w = 8 * len(targets)
+0023: h = len(veg_indices) * 0.5 + 4
+0024: fig, axes = plt.subplots(1, len(targets), figsize=(w, h), squeeze=False)
+...
+0086:     tick.set_fontsize(16)
+0087:     tick.set_fontweight('bold')
+0088: 
+0089: image_title = 'Correlation_Heatmap_Seasonal_LAI_LCC.png'
+0090: save_path = os.path.join(plots_folder, image_title)
+0091: plt.savefig(save_path, dpi=600, bbox_inches='tight')
+0092: plt.show()
+
+================================================================================
+CELL 71
+================================================================================
+...
+0011: final_combined_rice_df["Growth_stage"] = final_combined_rice_df["Growth_stage"].str.capitalize().str.strip()
+0012: final_combined_rice_df["Growth_stage"] = pd.Categorical(final_combined_rice_df["Growth_stage"], categories=growth_stage_order, ordered=True)
+0013: 
+0014: # Melt data for LAI and LCC with updated legend names
+0015: df_lai = final_combined_rice_df.melt(id_vars=['Growth_stage'], value_vars=['LAI'])
+0016: df_lai['variable'] = df_lai['variable'].replace({'LAI': 'In situ LAI'})
+0017: df_lai['Growth_stage'] = pd.Categorical(df_lai['Growth_stage'], categories=growth_stage_order, ordered=True)
+0018: 
+0019: df_lcc = final_combined_rice_df.melt(id_vars=['Growth_stage'], value_vars=['LCC'])
+0020: df_lcc['variable'] = df_lcc['variable'].replace({'LCC': 'In situ LCC'})
+0021: df_lcc['Growth_stage'] = pd.Categorical(df_lcc['Growth_stage'], categories=growth_stage_order, ordered=True)
+0022: 
+0023: palette = {"In situ LAI": "#1f77b4", "In situ LCC": "#ff9900"}
+0024: 
+0025: fig, axes = plt.subplots(1, 2, figsize=(20, 7))
+0026: 
+0027: sns.violinplot(data=df_lai, x='Growth_stage', y='value', hue='variable',
+0028:                palette=palette, dodge=True, inner="box", linewidth=2, ax=axes[0])
+0029: axes[0].set_title('(a)', fontsize=14, fontweight='bold')
+0030: axes[0].set_xlabel('Growth Stage', fontsize=14, fontweight='bold')
+0031: axes[0].set_ylabel('LAI (m² m⁻²)', fontsize=14, fontweight='bold')
+0032: for label in axes[0].get_xticklabels():
+0033:     label.set_fontsize(14)
+0034:     label.set_fontweight('bold')
+0035: for label in axes[0].get_yticklabels():
+0036:     label.set_fontsize(14)
+0037:     label.set_fontweight('bold')
+0038: legend0 = axes[0].legend(title='', loc='upper left', fontsize=14, frameon=True)
+0039: for text in legend0.get_texts():
+0040:     text.set_fontweight('bold')
+0041: 
+0042: sns.violinplot(data=df_lcc, x='Growth_stage', y='value', hue='variable',
+0043:                palette=palette, dodge=True, inner="box", linewidth=2, ax=axes[1])
+0044: axes[1].set_title('(b)', fontsize=14, fontweight='bold')
+0045: axes[1].set_xlabel('Growth Stage', fontsize=14, fontweight='bold')
+0046: axes[1].set_ylabel('LCC (μg/cm²)', fontsize=14, fontweight='bold')
+0047: for label in axes[1].get_xticklabels():
+
+================================================================================
+CELL 74
+================================================================================
+...
+0021: 
+0022: # --- Data load and preparation ---
+0023: df = pd.read_csv('final_dataframes/final_combined_rice_df.csv')
+0024: drop_cols = ['Unnamed: 0', 'Farm_ID']
+0025: df = df.drop(columns=[c for c in drop_cols if c in df.columns])
+0026: target_cols = ['LAI', 'LCC']
+0027: df = df.dropna(subset=target_cols)
+0028: df['Growth_stage'] = df['Growth_stage'].str.lower().str.strip()
+0029: df['Growth_stage'] = df['Growth_stage'].astype('category').cat.codes
+0030: 
+0031: selected_features = [
+...
+0051: def adjusted_r2_score(y_true, y_pred, p):
+0052:     n = y_true.shape[0]
+0053:     r2 = r2_score(y_true, y_pred)
+0054:     return 1 - (1 - r2) * (n - 1) / (n - p - 1) if n > p+1 else np.nan
+0055: 
+0056: def greedy_shap_feature_select_maxR2(model, X_train_scaled, X_test_scaled, y_train, y_test, selected_features, model_name):
+0057:     print(f"\n=== SHAP Greedy Feature Sweep for {model_name} ===")
+0058:     model.fit(X_train_scaled, y_train)
+0059:     # SHAP importance:
+0060:     try:
+0061:         explainer = shap.Explainer(model, X_train_scaled, feature_names=selected_features)
+0062:         shap_values = explainer(X_train_scaled)
+0063:         if shap_values.values.ndim == 3:
+0064:             mean_shap = np.abs(shap_values.values).mean(axis=(0, 1))
+0065:         else:
+0066:             mean_shap = np.abs(shap_values.values).mean(axis=0)
+0067:     except Exception:
+0068:         explainer = shap.KernelExplainer(model.predict, X_train_scaled[:100], feature_names=selected_features)
+0069:         shap_values = explainer.shap_values(X_train_scaled[:300], nsamples=100)
+0070:         shap_values = np.array(shap_values)
+0071:         if shap_values.ndim == 3:
+0072:             mean_shap = np.abs(shap_values).mean(axis=(0, 1))
+0073:         else:
+
+================================================================================
+CELL 78
+================================================================================
+...
+0008: 
+0009: SEED = 42
+0010: df = pd.read_csv('final_dataframes/final_combined_rice_df.csv')
+0011: drop_cols = ['Unnamed: 0', 'Farm_ID', 'lai_snap', 'lcc_snap']
+0012: df = df.drop(columns=[col for col in drop_cols if col in df.columns])
+0013: df['Growth_stage'] = df['Growth_stage'].astype('category').cat.codes
+0014: 
+0015: target_cols = ['LAI', 'LCC']
+0016: all_features = [
+0017:     "NDVI", "GNDVI", "NDVIre", "NDREI", "CIRE", "VREI", "EVI", "mND₇₀₅", "TCI",
+0018:     "mSR740", "AFRI₁₅₀₀", "AFRI₂₁₀₀", "NDII8", "SAVI", "SVHI", "NPCI", "CI783-B8",
+0019:     "CI783-B8A", "NBIB8", "NBIB8A", "MSI8A", "LSWI8", "NMDI", "REDRIG2","Growth_stage"
+...
+0057:     model_results[model_name] = (y_test_full, y_pred)
+0058: 
+0059: def plot_models_comparison_1by2(results, save_path=None):
+0060:     targets = ['LAI', 'LCC']
+0061:     subplot_labels = ['(a)', '(b)']
+0062:     display_order = ["RFR", "XGBoost", "SVR"]
+0063:     model_name_map = {"RFR": "RFR", "XGBoost": "XGBoost", "SVR": "SVR"}
+0064:     colors = {"RFR": 'tab:blue', "XGBoost": 'tab:orange', "SVR": 'tab:green'}
+...
+0103: # Ensure the folder exists
+0104: plots_dir = "plots"
+0105: os.makedirs(plots_dir, exist_ok=True)
+0106: save_path = os.path.join(plots_dir, "Model_Comparison_LAI_LCC.png")
+0107: 
+0108: plot_models_comparison_1by2(model_results, save_path=save_path)
+
+================================================================================
+CELL 80
+================================================================================
+...
+0014: output_dir = 'plots/shap_plots'
+0015: os.makedirs(output_dir, exist_ok=True)
+0016: base_dir = "./models/SHAP_Parsimonious"
+0017: target_cols = ['LAI', 'LCC']
+0018: model_names = ['RFR', 'XGBoost', 'SVR']
+0019: all_features = [
+0020:     'NDVI', 'GNDVI', 'NDVIre', 'NDREI', 'CIRE', 'VREI', 'EVI', 'mND₇₀₅', 'TCI',
+0021:     'mSR740', 'AFRI₁₅₀₀', 'AFRI₂₁₀₀', 'NDII8', 'SAVI', 'SVHI', 'NPCI', 'CI783-B8',
+...
+0023: ]
+0024: 
+0025: df = pd.read_csv('final_dataframes/final_combined_rice_df.csv')
+0026: drop_cols = ['Unnamed: 0', 'Farm_ID']
+0027: df = df.drop(columns=[c for c in drop_cols if c in df.columns])
+0028: df['Growth_stage'] = df['Growth_stage'].astype('category').cat.codes
+0029: 
+0030: def preprocess_for_shap(df, selected_features, scaler):
+...
+0037:     for i, target in enumerate(target_cols):
+0038:         if model_name == "SVR":
+0039:             def svr_predict(x): return model.estimators_[i].predict(x)
+0040:             explainer = shap.KernelExplainer(svr_predict, X.iloc[:50])
+0041:             shap_values = explainer.shap_values(X.iloc[:50], nsamples="auto")
+0042:             data = X.iloc[:50]
+0043:         else:
+0044:             explainer = shap.TreeExplainer(model.estimators_[i])
+0045:             shap_values = explainer.shap_values(X)
+0046:             data = X
+0047: 
+0048:         fig = plt.figure(figsize=FIG_SIZE, dpi=DPI)
+0049:         shap.summary_plot(
+
+================================================================================
+CELL 81
+================================================================================
+...
+0010: os.makedirs(plots_folder, exist_ok=True)
+0011: 
+0012: base_dir = "./models/SHAP_Parsimonious"
+0013: target_cols = ['LAI', 'LCC']
+0014: all_features = [
+0015:     "NDVI", "GNDVI", "NDVIre", "NDREI", "CIRE", "VREI", "EVI", "mND₇₀₅", "TCI",
+0016:     "mSR740", "AFRI₁₅₀₀", "AFRI₂₁₀₀", "NDII8", "SAVI", "SVHI", "NPCI", "CI783-B8",
+0017:     "CI783-B8A", "NBIB8", "NBIB8A", "MSI8A", "LSWI8", "NMDI", "REDRIG2", "Growth_stage"
+...
+0029: test_indices = joblib.load(os.path.join(base_dir, "test_indices.pkl"))
+0030: 
+0031: df = pd.read_csv('final_dataframes/final_combined_rice_df.csv')
+0032: drop_cols = ['Unnamed: 0', 'Farm_ID']
+0033: df = df.drop(columns=[c for c in drop_cols if c in df.columns])
+0034: df['Growth_stage'] = df['Growth_stage'].astype('category').cat.codes
+0035: X_full = df[all_features]
+0036: y_full = df[target_cols]
+...
+0045:     for i, target in enumerate(target_cols):
+0046:         # Get SHAP values depending on model type
+0047:         if model_label == "SVR":
+0048:             # For SVR, use KernelExplainer on subset to reduce compute
+0049:             def svr_predict(x): return model.estimators_[i].predict(x)
+0050:             explainer = shap.KernelExplainer(svr_predict, X_test[:50])
+0051:             shap_values = explainer.shap_values(X_test[:50], nsamples="auto")
+0052:             data = X_test[:50]
+0053:         else:
+0054:             explainer = shap.TreeExplainer(model.estimators_[i])
+0055:             shap_values = explainer.shap_values(X_test)
+0056:             data = X_test
+0057: 
+0058:         # Compute mean absolute SHAP values per feature
+0059:         mean_abs_shap = np.mean(np.abs(shap_values), axis=0)
+...
+0073:         plt.xticks(fontsize=18, fontweight='bold')
+0074:         ax.set_xlabel("(|SHAP value|) (average impact on model output)", fontsize=18, fontweight='bold')
+0075:         ax.grid(False)
+0076:         for side in ['top', 'left', 'right']:
+0077:             ax.spines[side].set_visible(False)
+0078:         ax.spines['bottom'].set_visible(True)
+0079:         ax.spines['bottom'].set_linewidth(2)
+0080:         ax.spines['bottom'].set_color('black')
+0081:         plt.tight_layout()
+0082:         plt.subplots_adjust(left=0.28)
+0083:         out_path = os.path.join(plots_folder, f"{model_label}_mean_SHAP_{target}_VERTICAL.png")
+0084:         plt.savefig(out_path, bbox_inches='tight', dpi=300, pad_inches=0.2)
+0085:         plt.show()
+0086:         plt.close()
+
+================================================================================
+CELL 82
+================================================================================
+...
+0029:         dpi=100,
+0030:         gridspec_kw={'wspace': -0.4, 'hspace': 0.25}
+0031:     )
+0032:     plt.subplots_adjust(left=0.02, right=0.98, top=0.98, bottom=0.02, wspace=0.03, hspace=0.30)
+0033: 
+0034:     # Label generation
+0035:     default_labels = [f"({chr(97 + idx)})" for idx in range(grid_rows * grid_cols)]
+0036:     use_labels = panel_labels or default_labels
+...
+0054: 
+0055: # Example usage:
+0056: models = ["RFR"]
+0057: targets = ["LAI", "LCC"]
+0058: mean_shap_dir = "plots/mean_SHAP"
+0059: shap_dir = "plots/shap_plots"
+0060: output_dir = "plots/shap_sidebyside"
+0061: panel_labels = ['(a)', '(b)', '(c)', '(d)']
+
+================================================================================
+CELL 83
+================================================================================
+...
+0030:         dpi=100,
+0031:         gridspec_kw={'wspace': -0.4, 'hspace': 0.24}
+0032:     )
+0033:     plt.subplots_adjust(left=0.02, right=0.98, top=0.98, bottom=0.02, wspace=0.03, hspace=0.40)
+0034: 
+0035:     # Label generation
+0036:     default_labels = [f"({chr(97 + idx)})" for idx in range(grid_rows * grid_cols)]
+0037:     use_labels = panel_labels or default_labels
+...
+0063: 
+0064: # Example usage for RFR:
+0065: models = ["RFR"]
+0066: targets = ["LAI", "LCC"]
+0067: mean_shap_dir = "plots/mean_SHAP"
+0068: shap_dir = "plots/shap_plots"
+0069: output_dir = "plots/shap_sidebyside"
+0070: panel_labels = ['(a)', '(b)', '(c)', '(d)']
+
+================================================================================
+CELL 84
+================================================================================
+...
+0004: ):
+0005:     os.makedirs(output_dir, exist_ok=True)
+0006: 
+0007:     targets = ["LAI", "LCC"]
+0008:     img_paths = [os.path.join(shap_dir, f"shap_summary_{model_name}_{t}.png") for t in targets]
+0009:     imgs = [Image.open(p) for p in img_paths]
+0010: 
+0011:     grid_rows = 1
+...
+0022:     )
+0023: 
+0024:     # Remove all padding/margins between subplots and figure edges
+0025:     plt.subplots_adjust(left=0, right=1, top=1, bottom=0, wspace=0, hspace=0)
+0026: 
+0027:     default_labels = ['(a)', '(b)']
+0028:     use_labels = panel_labels or default_labels
+0029: 
+
+================================================================================
+CELL 85
+================================================================================
+...
+0026:         dpi=100,
+0027:         gridspec_kw={'wspace': -0.1, 'hspace': 0.25}
+0028:     )
+0029:     plt.subplots_adjust(left=0.02, right=0.98, top=0.98, bottom=0.02, wspace=0.03, hspace=0.3)
+0030: 
+0031:     # Label generation
+0032:     default_labels = [f"({chr(97 + idx)})" for idx in range(grid_rows * grid_cols)]
+0033:     use_labels = panel_labels or default_labels
+...
+0059: 
+0060: # Example usage for XGBoost:
+0061: models = ["XGBoost"]
+0062: targets = ["LAI", "LCC"]
+0063: mean_SHAP_dir = "plots/mean_SHAP"
+0064: shap_dir = "plots/shap_plots"
+0065: output_dir = "plots/shap_sidebyside"
+0066: panel_labels = ['(a)', '(b)', '(c)', '(d)']
+
+================================================================================
+CELL 86
+================================================================================
+...
+0022:     )
+0023: 
+0024:     # Remove all padding/margins
+0025:     plt.subplots_adjust(left=0, right=1, top=0.88, bottom=0, wspace=0, hspace=0)
+0026: 
+0027:     default_labels = ['(a)', '(b)']
+0028:     use_labels = panel_labels or default_labels
+0029: 
+...
+0051: 
+0052: # Example usage:
+0053: model_name = "XGBoost"
+0054: targets = ["LAI", "LCC"]
+0055: shap_dir = "plots/shap_plots"
+0056: output_dir = "plots/shap_sidebyside"
+0057: panel_labels = ['(a)', '(b)']
+0058: 
+
+================================================================================
+CELL 87
+================================================================================
+...
+0026:         dpi=100,
+0027:         gridspec_kw={'wspace': -0.2, 'width_ratios': [1, 1.3]}
+0028:     )
+0029:     plt.subplots_adjust(left=0.01, right=0.99, top=0.98, bottom=0.02,  wspace=-0.5, hspace=0.2)
+0030: 
+0031:     # Label generation
+0032:     default_labels = [f"({chr(97 + idx)})" for idx in range(grid_rows * grid_cols)]
+0033:     use_labels = panel_labels or default_labels
+...
+0059: 
+0060: # Example usage for SVR:
+0061: models = ["SVR"]
+0062: targets = ["LAI", "LCC"]
+0063: mean_SHAP_dir = "plots/mean_SHAP"
+0064: shap_dir = "plots/shap_plots"
+0065: output_dir = "plots/shap_sidebyside"
+0066: panel_labels = ['(a)', '(b)', '(c)', '(d)']
+
+================================================================================
+CELL 88
+================================================================================
+...
+0025:     )
+0026: 
+0027:     # Remove all padding/margins around and between subplots
+0028:     plt.subplots_adjust(left=0, right=1, top=0.88, bottom=0, wspace=0, hspace=0)
+0029: 
+0030:     default_labels = ['(a)', '(b)']
+0031:     use_labels = panel_labels or default_labels
+0032: 
+...
+0055: 
+0056: # Example usage:
+0057: model_name = "SVR"
+0058: targets = ["LAI", "LCC"]
+0059: shap_dir = "plots/shap_plots"
+0060: output_dir = "plots/shap_sidebyside"
+0061: panel_labels = ['(a)', '(b)']
+0062: 
+
+================================================================================
+CELL 89
+================================================================================
+...
+0013: df = pd.read_csv('final_dataframes/final_combined_rice_df.csv')
+0014: df['Growth_stage'] = df['Growth_stage'].astype('category').cat.codes
+0015: 
+0016: targets = ['LAI', 'LCC']
+0017: model_names = ["RFR", "XGBoost", "SVR"]
+0018: model_files = {
+0019:     "RFR": "RFR/shap_best_model.pkl",
+0020:     "XGBoost": "XGBoost/shap_best_model.pkl",
+...
+0048:         y_true = y_test_full[target].values
+0049:         y_hat = y_pred[:, t_idx]
+0050:         r2 = r2_score(y_true, y_hat)
+0051:         adj_r2 = 1 - (1 - r2) * (n - 1) / (n - p - 1) if n > p + 1 else np.nan
+0052:         metrics_data["R2"].append(r2)
+0053:         metrics_data["Adj R2"].append(adj_r2)
+0054:         metrics_data["Model"].append(model_name)
+0055:         metrics_data["Target"].append(target)
+...
+0085:     for tick_label in ax.get_yticklabels():
+0086:         tick_label.set_fontsize(16)
+0087:         tick_label.set_fontweight('bold')
+0088:     legend = ax.legend(frameon=True, fontsize=15, title_fontsize=15, loc='upper left')
+0089:     legend.get_frame().set_edgecolor('black')
+0090:     legend.get_frame().set_linewidth(1.2)
+0091: 
+0092: plt.tight_layout()
+
+================================================================================
+CELL 90
+================================================================================
+...
+0002: df = pd.read_csv('final_dataframes/final_combined_rice_df.csv')
+0003: df['Growth_stage'] = df['Growth_stage'].astype('category').cat.codes
+0004: 
+0005: targets = ['LAI', 'LCC']
+0006: model_names = ['RFR', 'XGBoost', 'SVR']
+0007: 
+0008: selected_features = [
+0009:     "NDVI", "GNDVI", "NDVIre", "NDREI", "CIRE", "VREI", "EVI", "mND₇₀₅", "TCI",
+
+================================================================================
+CELL 92
+================================================================================
+...
+0001: import os
+0002: import numpy as np
+0003: import numpy.ma as ma
+0004: import rasterio as rio
+0005: import joblib
+0006: import matplotlib.pyplot as plt
+0007: import pandas as pd
+0008: from matplotlib.gridspec import GridSpec
+0009: 
+0010: # 1. Load satellite bands
+0011: image_path = "satellite_imagery/10-06-2023_sen2res/S2A_MSIL2A_20230610T074621_N0509_R135_T36MYE_20230610T111702_super_resolved_masked.tif"
+0012: with rio.open(image_path) as src:
+0013:     bands = src.read(range(1, 13), masked=True).astype(np.float32).filled(np.nan)
+0014:     profile = src.profile
+0015: bands = np.where(np.isinf(bands), np.nan, bands)
+0016: B1, B2, B3, B4, B5, B6, B7, B8, B8A, B9, B11, B12 = bands
+0017: 
+0018: def safe_divide(num, denom, eps=1e-10):
+0019:     mask = (np.abs(denom) >= eps) & ~np.isnan(num) & ~np.isnan(denom) & ~np.isinf(num) & ~np.isinf(denom)
+0020:     res = np.full_like(num, np.nan)
+0021:     res[mask] = num[mask] / denom[mask]
+0022:     return res
+0023: 
+0024: area_mask = ~np.isnan(B4)
+0025: 
+0026: # 2. Compute all indices
+0027: vegetation_indices = {
+0028:     "NDVI": safe_divide(B8 - B4, B8 + B4),
+...
+0051:     "REDRIG2": safe_divide((B8 + B8A) / 2, (B5 + B6 + B7) / 3),
+0052: }
+0053: for name, value in vegetation_indices.items():
+0054:     mask = (~area_mask) | (~np.isfinite(value))
+0055:     vegetation_indices[name] = ma.masked_array(value, mask)
+0056: 
+0057: # 3. Add Growth_stage as vegetative category (code = 2)
+0058: allowed_codes = [0, 1, 2]
+0059: growth_stage_code = 2  
+...
+0063: 
+0064: h, w = vegetation_indices["NDVI"].shape
+0065: growth_stage_arr = np.full((h, w), float(growth_stage_code), dtype=np.float32)
+0066: vegetation_indices["Growth_stage"] = ma.masked_array(growth_stage_arr, mask=~area_mask)
+0067: 
+0068: # 4. Model input features
+0069: all_features = [
+0070:     "NDVI", "GNDVI", "NDVIre", "NDREI", "CIRE", "VREI", "EVI", "mND₇₀₅", "TCI",
+...
+0073: ]
+0074: 
+0075: def get_feature_matrix(feature_list, vi_dict):
+0076:     return np.vstack([vi_dict[f].filled(np.nan).flatten() for f in feature_list]).T
+0077: 
+0078: def predict_map(model_dir, scaler_file, shap_file, model_file):
+0079:     scaler = joblib.load(os.path.join(model_dir, scaler_file))
+0080:     shap_features = joblib.load(os.path.join(model_dir, shap_file))
+0081:     model = joblib.load(os.path.join(model_dir, model_file))
+0082:     X_shap = get_feature_matrix(shap_features, vegetation_indices)
+0083:     valid = ~np.any(np.isnan(X_shap), axis=1)
+0084:     X_all = get_feature_matrix(all_features, vegetation_indices)
+0085:     # FIXED: Convert to DataFrame before scaling
+0086:     X_all_scaled = scaler.transform(pd.DataFrame(X_all, columns=all_features))
+0087:     X_scaled = X_all_scaled[:, [all_features.index(f) for f in shap_features]]
+0088:     X_valid_scaled = X_scaled[valid]
+0089:     y_pred = model.predict(X_valid_scaled)
+0090:     arr = np.full((h * w, y_pred.shape[1]), np.nan)
+0091:     arr[valid, :] = y_pred
+0092:     targets = ['LAI', 'LCC'][:y_pred.shape[1]]
+0093:     return {t: arr[:, i].reshape(h, w) for i, t in enumerate(targets)}
+0094: 
+0095: model_dir = "./models/SHAP_Parsimonious"
+0096: map_models = {
+...
+0156:     cax.yaxis.tick_right()
+0157:     label = targets[row_idx]
+0158:     # Add units for colorbar labels here
+0159:     if label == 'LAI':
+0160:         cax.set_ylabel(f"{label} (m² m⁻²)", rotation=90, labelpad=20, fontsize=18, fontweight='bold')
+0161:     elif label == 'LCC':
+0162:         cax.set_ylabel(f"{label} (μg/cm²)", rotation=90, labelpad=20, fontsize=18, fontweight='bold')
+0163:     else:
+
+================================================================================
+CELL 93
+================================================================================
+...
+0001: 
+0002: # 1. Load satellite bands
+0003: image_path = "satellite_imagery/20-07-2023_sen2res/S2A_MSIL2A_20230720T074621_N0509_R135_T36MYE_20230720T111256_super_resolved_masked.tif"
+0004: with rio.open(image_path) as src:
+0005:     bands = src.read(range(1, 13), masked=True).astype(np.float32).filled(np.nan)
+0006:     profile = src.profile
+0007: bands = np.where(np.isinf(bands), np.nan, bands)
+0008: B1, B2, B3, B4, B5, B6, B7, B8, B8A, B9, B11, B12 = bands
+0009: 
+0010: def safe_divide(num, denom, eps=1e-10):
+0011:     mask = (np.abs(denom) >= eps) & ~np.isnan(num) & ~np.isnan(denom) & ~np.isinf(num) & ~np.isinf(denom)
+0012:     res = np.full_like(num, np.nan)
+0013:     res[mask] = num[mask] / denom[mask]
+0014:     return res
+0015: 
+0016: area_mask = ~np.isnan(B4)
+0017: 
+0018: # 2. Compute all indices
+0019: vegetation_indices = {
+0020:     "NDVI": safe_divide(B8 - B4, B8 + B4),
+...
+0043:     "REDRIG2": safe_divide((B8 + B8A) / 2, (B5 + B6 + B7) / 3),
+0044: }
+0045: for name, value in vegetation_indices.items():
+0046:     mask = (~area_mask) | (~np.isfinite(value))
+0047:     vegetation_indices[name] = ma.masked_array(value, mask)
+0048: 
+0049: # 3. Add Growth_stage as reproductive category (code = 0)
+0050: allowed_codes = [0, 1, 2]
+0051: growth_stage_code = 0  # Reproductive
+...
+0054: 
+0055: h, w = vegetation_indices["NDVI"].shape
+0056: growth_stage_arr = np.full((h, w), float(growth_stage_code), dtype=np.float32)
+0057: vegetation_indices["Growth_stage"] = ma.masked_array(growth_stage_arr, mask=~area_mask)
+0058: 
+0059: # 4. Model input features
+0060: all_features = [
+0061:     "NDVI", "GNDVI", "NDVIre", "NDREI", "CIRE", "VREI", "EVI", "mND₇₀₅", "TCI",
+...
+0064: ]
+0065: 
+0066: def get_feature_matrix(feature_list, vi_dict):
+0067:     return np.vstack([vi_dict[f].filled(np.nan).flatten() for f in feature_list]).T
+0068: 
+0069: def predict_map(model_dir, scaler_file, shap_file, model_file):
+0070:     scaler = joblib.load(os.path.join(model_dir, scaler_file))
+0071:     shap_features = joblib.load(os.path.join(model_dir, shap_file))
+0072:     model = joblib.load(os.path.join(model_dir, model_file))
+0073:     X_shap = get_feature_matrix(shap_features, vegetation_indices)
+0074:     valid = ~np.any(np.isnan(X_shap), axis=1)
+0075:     X_all = get_feature_matrix(all_features, vegetation_indices)
+0076:     # FIXED: Convert to DataFrame before scaling
+0077:     X_all_scaled = scaler.transform(pd.DataFrame(X_all, columns=all_features))
+0078:     X_scaled = X_all_scaled[:, [all_features.index(f) for f in shap_features]]
+0079:     X_valid_scaled = X_scaled[valid]
+0080:     y_pred = model.predict(X_valid_scaled)
+0081:     arr = np.full((h * w, y_pred.shape[1]), np.nan)
+0082:     arr[valid, :] = y_pred
+0083:     targets = ['LAI', 'LCC'][:y_pred.shape[1]]
+0084:     return {t: arr[:, i].reshape(h, w) for i, t in enumerate(targets)}
+0085: 
+0086: model_dir = "./models/SHAP_Parsimonious"
+0087: map_models = {
+...
+0147:     cax.yaxis.tick_right()
+0148:     label = targets[row_idx]
+0149:     # Add units to the colorbar labels
+0150:     if label == 'LAI':
+0151:         cax.set_ylabel(f"{label} (m² m⁻²)", rotation=90, labelpad=20, fontsize=18, fontweight='bold')
+0152:     elif label == 'LCC':
+0153:         cax.set_ylabel(f"{label} (μg/cm²)", rotation=90, labelpad=20, fontsize=18, fontweight='bold')
+0154:     else:
+
+================================================================================
+CELL 94
+================================================================================
+...
+0001: 
+0002: # 1. Load satellite bands
+0003: image_path = "satellite_imagery/14-08-2023_sen2res/S2B_MSIL2A_20230814T074619_N0509_R135_T36MYE_20230814T111031_super_resolved_masked.tif"
+0004: with rio.open(image_path) as src:
+0005:     bands = src.read(range(1, 13), masked=True).astype(np.float32).filled(np.nan)
+0006:     profile = src.profile
+0007: bands = np.where(np.isinf(bands), np.nan, bands)
+0008: B1, B2, B3, B4, B5, B6, B7, B8, B8A, B9, B11, B12 = bands
+0009: 
+0010: def safe_divide(num, denom, eps=1e-10):
+0011:     mask = (np.abs(denom) >= eps) & ~np.isnan(num) & ~np.isnan(denom) & ~np.isinf(num) & ~np.isinf(denom)
+0012:     res = np.full_like(num, np.nan)
+0013:     res[mask] = num[mask] / denom[mask]
+0014:     return res
+0015: 
+0016: area_mask = ~np.isnan(B4)
+0017: 
+0018: # 2. Compute all indices
+0019: vegetation_indices = {
+0020:     "NDVI": safe_divide(B8 - B4, B8 + B4),
+...
+0043:     "REDRIG2": safe_divide((B8 + B8A) / 2, (B5 + B6 + B7) / 3),
+0044: }
+0045: for name, value in vegetation_indices.items():
+0046:     mask = (~area_mask) | (~np.isfinite(value))
+0047:     vegetation_indices[name] = ma.masked_array(value, mask)
+0048: 
+0049: # 3. Add Growth_stage as ripening category (code = 1)
+0050: allowed_codes = [0, 1, 2]
+0051: growth_stage_code = 1  # Ripening
+...
+0054: 
+0055: h, w = vegetation_indices["NDVI"].shape
+0056: growth_stage_arr = np.full((h, w), float(growth_stage_code), dtype=np.float32)
+0057: vegetation_indices["Growth_stage"] = ma.masked_array(growth_stage_arr, mask=~area_mask)
+0058: 
+0059: # 4. Model input features
+0060: all_features = [
+0061:     "NDVI", "GNDVI", "NDVIre", "NDREI", "CIRE", "VREI", "EVI", "mND₇₀₅", "TCI",
+...
+0064: ]
+0065: 
+0066: def get_feature_matrix(feature_list, vi_dict):
+0067:     return np.vstack([vi_dict[f].filled(np.nan).flatten() for f in feature_list]).T
+0068: 
+0069: def predict_map(model_dir, scaler_file, shap_file, model_file):
+0070:     scaler = joblib.load(os.path.join(model_dir, scaler_file))
+0071:     shap_features = joblib.load(os.path.join(model_dir, shap_file))
+0072:     model = joblib.load(os.path.join(model_dir, model_file))
+0073:     X_shap = get_feature_matrix(shap_features, vegetation_indices)
+0074:     valid = ~np.any(np.isnan(X_shap), axis=1)
+0075:     X_all = get_feature_matrix(all_features, vegetation_indices)
+0076:     # FIXED: Convert to DataFrame before scaling
+0077:     X_all_scaled = scaler.transform(pd.DataFrame(X_all, columns=all_features))
+0078:     X_scaled = X_all_scaled[:, [all_features.index(f) for f in shap_features]]
+0079:     X_valid_scaled = X_scaled[valid]
+0080:     y_pred = model.predict(X_valid_scaled)
+0081:     arr = np.full((h * w, y_pred.shape[1]), np.nan)
+0082:     arr[valid, :] = y_pred
+0083:     targets = ['LAI', 'LCC'][:y_pred.shape[1]]
+0084:     return {t: arr[:, i].reshape(h, w) for i, t in enumerate(targets)}
+0085: 
+0086: model_dir = "./models/SHAP_Parsimonious"
+0087: map_models = {
+...
+0146:     cax.yaxis.set_label_position('right')
+0147:     cax.yaxis.tick_right()
+0148:     label = targets[row_idx]
+0149:     if label == 'LAI':
+0150:         cax.set_ylabel(f"{label} (m² m⁻²)", rotation=90, labelpad=20, fontsize=18, fontweight='bold')
+0151:     elif label == 'LCC':
+0152:         cax.set_ylabel(f"{label} (μg/cm²)", rotation=90, labelpad=20, fontsize=18, fontweight='bold')
+0153:     else:
